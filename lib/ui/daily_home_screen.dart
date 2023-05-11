@@ -4,6 +4,7 @@ import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.da
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DailyHomeScreen extends StatefulWidget {
   static GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
@@ -32,9 +33,20 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
 
   Widget _getBody() {
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [_buildHeader()],
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const Spacer(),
+            SvgPicture.asset(
+              'assets/heart.svg',
+              width: MediaQuery.of(context).size.width - 160,
+            ),
+            const Spacer()
+          ],
+        ),
       ),
     );
   }
@@ -44,7 +56,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
         height: 20,
         child: Container(
           height: (MediaQuery.of(context).size.height / 4) * 2,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
           decoration: BoxDecoration(gradient: AppGradients.linearGradient),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
