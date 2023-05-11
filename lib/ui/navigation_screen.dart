@@ -1,9 +1,12 @@
 import 'dart:collection';
 
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/daily_home_screen.dart';
 import 'package:daily_dose_of_happiness/ui/daily_joke_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -22,6 +25,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //quick load
+    BlocProvider.of<MotivationBloc>(context).add(LoadMotivationEvent());
+
     return WillPopScope(
       onWillPop: () async {
         // navigator in widgets
@@ -113,6 +119,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       switch (index) {
         // home
         case 0:
+          BlocProvider.of<MotivationBloc>(context).add(LoadMotivationEvent());
           break;
         //jokes
         case 1:

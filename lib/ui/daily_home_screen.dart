@@ -1,6 +1,9 @@
 import 'package:clippy_flutter/clippy_flutter.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyHomeScreen extends StatefulWidget {
   static GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
@@ -51,13 +54,30 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                   style: AppTextStyle.getHeaderTextStyle(
                       Colors.white.withOpacity(0.6))),
               const Spacer(),
-              const Text(
-                  'We dont stop playing because we grow old; we grow old because we stop playing.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 26,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600)),
+              BlocBuilder<MotivationBloc, MotivationState>(
+                  builder: (context, state) {
+                if (state is LoadedMotivationState) {
+                  return Column(
+                    children: [
+                      Text(state.motivation[0].text,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 26,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600)),
+                      Text('- ' + state.motivation[0].authorName + ' -',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400)),
+                    ],
+                  );
+                } else if (state is FailedLoadMotivationState) {
+                  return const Text('Heute gibt es keinen neuen Spruch..');
+                }
+                return Container();
+              }),
               const Spacer(),
             ],
           ),

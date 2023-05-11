@@ -1,6 +1,9 @@
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
+import 'package:daily_dose_of_happiness/repository/motivation_repository.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/navigation_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,13 +15,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Daily dose of Happiness',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MotivationBloc>(
+            create: (context) =>
+                MotivationBloc(repository: MotivationRepository()))
+      ],
+      child: MaterialApp(
+        title: 'Daily dose of Happiness',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+          useMaterial3: true,
+        ),
+        home: const NavigationScreen(),
       ),
-      home: const NavigationScreen(),
     );
   }
 }
