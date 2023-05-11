@@ -1,3 +1,4 @@
+import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 
@@ -28,11 +29,38 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
 
   Widget _getBody() {
     return SingleChildScrollView(
-      child: Container(
-        height: 200,
-        width: 200,
-        color: AppColors.primaryColor,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [_buildHeader()],
       ),
     );
+  }
+
+  Widget _buildHeader() {
+    return Arc(
+        height: 20,
+        child: Container(
+          height: (MediaQuery.of(context).size.height / 4) * 2,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(gradient: AppGradients.linearGradient),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('DAILY DOSE OF HAPPINESS',
+                  style: AppTextStyle.getHeaderTextStyle(
+                      Colors.white.withOpacity(0.6))),
+              const Spacer(),
+              const Text(
+                  'We dont stop playing because we grow old; we grow old because we stop playing.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 26,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600)),
+              const Spacer(),
+            ],
+          ),
+        ));
   }
 }
