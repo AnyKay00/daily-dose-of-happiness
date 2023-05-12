@@ -36,6 +36,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
     return SingleChildScrollView(
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
+        width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -58,6 +59,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
         clipShadows: [ClipShadow(color: Colors.black45)],
         child: Container(
           height: (MediaQuery.of(context).size.height / 4) * 2,
+          width: double.infinity,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
           decoration: BoxDecoration(gradient: AppGradients.linearGradient),
           child: Column(
