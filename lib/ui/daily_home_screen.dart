@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
@@ -54,6 +55,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   Widget _buildHeader() {
     return Arc(
         height: 20,
+        clipShadows: [ClipShadow(color: Colors.black45)],
         child: Container(
           height: (MediaQuery.of(context).size.height / 4) * 2,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
@@ -71,8 +73,10 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 if (state is LoadedMotivationState) {
                   return Column(
                     children: [
-                      Text(state.motivation[0].text,
+                      AutoSizeText(state.motivation[0].text,
                           textAlign: TextAlign.center,
+                          maxFontSize: 26,
+                          minFontSize: 16,
                           style: const TextStyle(
                               fontSize: 26,
                               color: Colors.white,
