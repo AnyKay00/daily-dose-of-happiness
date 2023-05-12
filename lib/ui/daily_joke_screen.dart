@@ -56,9 +56,11 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
         height: 80,
         width: double.infinity,
         decoration: BoxDecoration(gradient: AppGradients.linearGradient),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
+        child: Padding(
+          padding:
+              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 10),
+          child: Align(
+            alignment: Alignment.topCenter,
             child: Text('DAILY DOSE OF HAPPINESS',
                 style: AppTextStyle.getHeaderTextStyle(
                     Colors.white.withOpacity(0.6))),
