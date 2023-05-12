@@ -1,4 +1,6 @@
+import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
+import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 import 'package:daily_dose_of_happiness/repository/motivation_repository.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/navigation_screen.dart';
@@ -19,7 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<MotivationBloc>(
             create: (context) =>
-                MotivationBloc(repository: MotivationRepository()))
+                MotivationBloc(repository: MotivationRepository())),
+        BlocProvider<JokeBloc>(
+            create: (context) => JokeBloc(repository: JokeRepository()))
       ],
       child: MaterialApp(
         title: 'Daily dose of Happiness',

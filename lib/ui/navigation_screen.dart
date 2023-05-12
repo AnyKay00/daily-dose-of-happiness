@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
@@ -25,8 +27,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //quick load
+    //quick load // to do load one time and safe in storage£
     BlocProvider.of<MotivationBloc>(context).add(LoadMotivationEvent());
+    BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
 
     return WillPopScope(
       onWillPop: () async {
@@ -116,15 +119,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void _onTapHandler(int index) {
     // add the right bloc event and fill navigationque
     setState(() {
-      switch (index) {
-        // home
-        case 0:
-          BlocProvider.of<MotivationBloc>(context).add(LoadMotivationEvent());
-          break;
-        //jokes
-        case 1:
-          break;
-      }
       _selectedIndex = index;
     });
   }
