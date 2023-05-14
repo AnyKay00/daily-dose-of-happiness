@@ -18,7 +18,7 @@ class APICacheManager {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.manageExternalStorage,
     ].request();
-    if(statuses[Permission.manageExternalStorage] != PermissionStatus.granted) {
+    if(statuses[Permission.manageExternalStorage] != PermissionStatus.granted && !Platform.isIOS) {
       return null;
     }
 
