@@ -40,19 +40,16 @@ class APICacheManager {
     // Read the file
     String? content = await file?.readAsString();
     DateTime? lastModified = await file?.lastModified();
-    DateTime now = DateTime.now();
 
     //if file contrent is older then one day fetch another one
     if(content!.isEmpty || DateTime.now().day != lastModified!.day) {
       return null;
     }
-    dynamic jsonContent = jsonDecode(content!);
-    print(jsonContent);
+    dynamic jsonContent = jsonDecode(content);
 
     return jsonContent;
   } catch (e) {
     // If encountering an error, return 0
-    print(e);
     return null;
   }
 }
