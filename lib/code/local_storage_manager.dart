@@ -9,7 +9,7 @@ class APICacheManager {
   APICacheManager(this.cachename);
 
   Future<String?> get _localPath async {
-    final directory = await getExternalStorageDirectory();
+    final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
 
     return directory?.path;
   }
