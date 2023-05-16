@@ -39,7 +39,7 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
         MediaQuery.of(context).viewPadding.top -
         kBottomNavigationBarHeight;
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         height: _height,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,12 +53,14 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
       height: 20,
       clipShadows: [ClipShadow(color: Colors.black45)],
       child: Container(
-        height: 80,
+        height: 100,
         width: double.infinity,
         decoration: BoxDecoration(gradient: AppGradients.linearGradient),
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
           child: Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
             child: Text('DAILY DOSE OF HAPPINESS',
                 style: AppTextStyle.getHeaderTextStyle(
                     Colors.white.withOpacity(0.6))),
