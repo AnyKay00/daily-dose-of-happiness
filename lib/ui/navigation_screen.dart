@@ -83,7 +83,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     shape: BoxShape.circle),
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.calendar_month),
+                  child: Icon(Icons.favorite_border_rounded),
                 ),
               ),
             ),

@@ -61,6 +61,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           height: (MediaQuery.of(context).size.height / 4) * 2,
           width: double.infinity,
           padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+
           decoration: BoxDecoration(gradient: AppGradients.linearGradient),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

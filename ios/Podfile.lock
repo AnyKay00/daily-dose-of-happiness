@@ -4,6 +4,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - permission_handler_apple (9.0.4):
+  - flutter_native_splash (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -11,9 +12,13 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+
+
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
@@ -23,6 +28,14 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
+
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
