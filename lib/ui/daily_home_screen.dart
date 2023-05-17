@@ -3,6 +3,7 @@ import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
+import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,6 +18,7 @@ class DailyHomeScreen extends StatefulWidget {
 
 class _DailyHomeScreenState extends State<DailyHomeScreen> {
   static GlobalKey<NavigatorState> _homeKey = GlobalKey<NavigatorState>();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     DailyHomeScreen.homeKey = _homeKey;
@@ -26,6 +28,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: AppDrawer(),
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
       body: _getBody(),
@@ -60,37 +64,59 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
         child: Container(
           height: (MediaQuery.of(context).size.height / 4) * 2,
           width: double.infinity,
-          padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-
+          padding:
+              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 8),
           decoration: BoxDecoration(gradient: AppGradients.linearGradient),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('DAILY DOSE OF HAPPINESS',
-                  style: AppTextStyle.getHeaderTextStyle(
-                      Colors.white.withOpacity(0.6))),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      constraints: const BoxConstraints(),
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.menu, color: Colors.white),
+                      onPressed: () => scaffoldKey.currentState!.openDrawer(),
+                    ),
+                  ),
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Text('DAILY DOSE OF HAPPINESS',
+                        style: AppTextStyle.getHeaderTextStyle(
+                            Colors.white.withOpacity(0.6))),
+                  ),
+                  const Spacer(flex: 2)
+                ],
+              ),
               const Spacer(),
               BlocBuilder<MotivationBloc, MotivationState>(
                   builder: (context, state) {
                 if (state is LoadedMotivationState) {
-                  return Column(
-                    children: [
-                      AutoSizeText(state.motivation[0].text,
-                          textAlign: TextAlign.center,
-                          maxFontSize: 26,
-                          minFontSize: 16,
-                          style: const TextStyle(
-                              fontSize: 26,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600)),
-                      Text('- ' + state.motivation[0].authorName + ' -',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400)),
-                    ],
+                  return Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        AutoSizeText(state.motivation[0].text,
+                            textAlign: TextAlign.center,
+                            maxFontSize: 26,
+                            minFontSize: 16,
+                            style: const TextStyle(
+                                fontSize: 26,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600)),
+                        Text('- ' + state.motivation[0].authorName + ' -',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400)),
+                      ],
+                    ),
                   );
                 } else if (state is FailedLoadMotivationState) {
                   return const Text('Heute gibt es keinen neuen Spruch..');

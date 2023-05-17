@@ -3,6 +3,7 @@ import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
+import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,7 +18,7 @@ class DailyJokeScreen extends StatefulWidget {
 
 class _DailyJokeScreenState extends State<DailyJokeScreen> {
   static GlobalKey<NavigatorState> _jokeKey = GlobalKey<NavigatorState>();
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     DailyJokeScreen.jokeKey = _jokeKey;
@@ -28,6 +29,8 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      key: scaffoldKey,
+      drawer: AppDrawer(),
       backgroundColor: AppColors.backgroundColor,
       body: _getBody(),
     );
@@ -53,20 +56,32 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
       height: 20,
       clipShadows: [ClipShadow(color: Colors.black45)],
       child: Container(
-        height: 100,
+        height: 130,
+        padding: EdgeInsets.only(
+            top: MediaQuery.of(context).viewPadding.top, bottom: 5),
         width: double.infinity,
         decoration: BoxDecoration(gradient: AppGradients.linearGradient),
-
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-
-            child: Text('DAILY DOSE OF HAPPINESS',
-                style: AppTextStyle.getHeaderTextStyle(
-                    Colors.white.withOpacity(0.6))),
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+                icon: const Icon(Icons.menu, color: Colors.white),
+                onPressed: () => scaffoldKey.currentState!.openDrawer(),
+              ),
+            ),
+            const Spacer(),
+            Align(
+              alignment: Alignment.center,
+              child: Text('DAILY DOSE OF HAPPINESS',
+                  style: AppTextStyle.getHeaderTextStyle(
+                      Colors.white.withOpacity(0.6))),
+            ),
+            const Spacer(flex: 2)
+          ],
         ),
       ),
     );
