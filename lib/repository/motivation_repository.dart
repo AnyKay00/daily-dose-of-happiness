@@ -13,7 +13,7 @@ class MotivationRepository {
     try {
       Map<String, dynamic>? cache = await _cacheManager.readFromFile();
       if (cache == null) {
-        Response response = await get(Uri.parse(_rootUrl));
+        Response response = await get(Uri.parse(_rootUrl), headers: {'Accept': 'application/json'});
         if (response.statusCode == 200) {
           Iterable body = jsonDecode(utf8.decode(response.bodyBytes));
           MotivationModel motivation = MotivationModel.fromJson(body.first);
