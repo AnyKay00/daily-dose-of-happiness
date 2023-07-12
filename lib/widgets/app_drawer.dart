@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 class AppDrawer extends StatelessWidget {
   final Uri _urlZenquotes = Uri.parse('https://zenquotes.io/');
   final Uri _urljokeapi = Uri.parse('https://sv443.net/jokeapi/v2/');
+  final Uri _urldadjokeapi = Uri.parse('https://icanhazdadjoke.com/');
   final impressumText = '''Impressum
 Diensteanbieter
 Koob, Dennis
@@ -71,7 +72,7 @@ Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke''';
                       _launchUrl();
                     },
                     child: Text(_urlZenquotes.toString())),
-                const Text('JokeAPI',
+                const Text('Base JokeAPI',
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const Text('Jokes provided by:'),
                 TextButton(
@@ -79,6 +80,14 @@ Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke''';
                       _launchUrl();
                     },
                     child: Text(_urljokeapi.toString())),
+                const Text('DadJoke',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
+                const Text('Jokes provided by:'),
+                TextButton(
+                    onPressed: () {
+                      _launchUrl();
+                    },
+                    child: Text(_urldadjokeapi.toString())),
                 const Divider(
                   height: 50,
                 ),
