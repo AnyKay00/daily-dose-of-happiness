@@ -5,20 +5,8 @@ class AppDrawer extends StatelessWidget {
   final Uri _urlZenquotes = Uri.parse('https://zenquotes.io/');
   final Uri _urljokeapi = Uri.parse('https://sv443.net/jokeapi/v2/');
   final Uri _urldadjokeapi = Uri.parse('https://icanhazdadjoke.com/');
-  final impressumText = '''Impressum
-Diensteanbieter
-Koob, Dennis
-Karl-Arnold-Str. 31
-52525 Heinsberg
-
-Kontaktmöglichkeiten
-E-Mail-Adresse:
-invio.business@gmail.com
-
-Haftungs- und Schutzrechtshinweise
-Haftungsausschluss: Die Inhalte dieses Onlineangebotes wurden sorgfältig und nach unserem aktuellen Kenntnisstand erstellt, dienen jedoch nur der Information und entfalten keine rechtlich bindende Wirkung, sofern es sich nicht um gesetzlich verpflichtende Informationen (z.B. das Impressum, die Datenschutzerklärung, AGB oder verpflichtende Belehrungen von Verbrauchern) handelt. Wir behalten uns vor, die Inhalte vollständig oder teilweise zu ändern oder zu löschen, soweit vertragliche Verpflichtungen unberührt bleiben. Alle Angebote sind freibleibend und unverbindlich.
-
-Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke''';
+  final Uri _imprintlink = Uri.parse(
+      'https://anykay00.github.io/daily-dose-of-happiness/index.html#about');
   AppDrawer({super.key});
 
   @override
@@ -68,40 +56,52 @@ Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke''';
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const Text('Inspirational quotes provided by:'),
                 TextButton(
-                    onPressed: () {
-                      _launchUrl();
+                    onPressed: () async {
+                      if (!await launchUrl(_urlZenquotes)) {
+                        throw Exception('Could not launch $_urlZenquotes');
+                      }
                     },
                     child: Text(_urlZenquotes.toString())),
                 const Text('Base JokeAPI',
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const Text('Jokes provided by:'),
                 TextButton(
-                    onPressed: () {
-                      _launchUrl();
+                    onPressed: () async {
+                      if (!await launchUrl(_urljokeapi)) {
+                        throw Exception('Could not launch $_urljokeapi');
+                      }
                     },
                     child: Text(_urljokeapi.toString())),
                 const Text('DadJoke',
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const Text('Jokes provided by:'),
                 TextButton(
-                    onPressed: () {
-                      _launchUrl();
+                    onPressed: () async {
+                      if (!await launchUrl(_urldadjokeapi)) {
+                        throw Exception('Could not launch $_urldadjokeapi');
+                      }
                     },
                     child: Text(_urldadjokeapi.toString())),
                 const Divider(
                   height: 50,
                 ),
-
-                Text(impressumText)
+                TextButton(
+                    onPressed: () async {
+                      if (!await launchUrl(_imprintlink)) {
+                        throw Exception('Could not launch $_imprintlink');
+                      }
+                    },
+                    child: const Text('Imprint')),
+                TextButton(
+                    onPressed: () async {
+                      if (!await launchUrl(_imprintlink)) {
+                        throw Exception('Could not launch $_urlZenquotes');
+                      }
+                    },
+                    child: const Text('Private Policy')),
               ],
             ),
           ),
         ));
-  }
-
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(_urlZenquotes)) {
-      throw Exception('Could not launch $_urlZenquotes');
-    }
   }
 }
