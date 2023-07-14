@@ -4,6 +4,7 @@ import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.da
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
+import 'package:daily_dose_of_happiness/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -71,28 +72,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      constraints: const BoxConstraints(),
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () => scaffoldKey.currentState!.openDrawer(),
-                    ),
-                  ),
-                  const Spacer(),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Text('DAILY DOSE OF HAPPINESS',
-                        style: AppTextStyle.getHeaderTextStyle(
-                            Colors.white.withOpacity(0.6))),
-                  ),
-                  const Spacer(flex: 2)
-                ],
-              ),
+              HeaderWidget(scaffoldKey: scaffoldKey),
               const Spacer(),
               BlocBuilder<MotivationBloc, MotivationState>(
                   builder: (context, state) {
@@ -103,7 +83,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                       children: [
                         AutoSizeText(state.motivation[0].text,
                             textAlign: TextAlign.center,
-                            maxFontSize: 26,
+                            maxFontSize: 50,
                             minFontSize: 16,
                             style: const TextStyle(
                                 fontSize: 26,
