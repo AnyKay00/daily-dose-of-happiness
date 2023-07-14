@@ -4,6 +4,7 @@ import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
+import 'package:daily_dose_of_happiness/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -56,34 +57,12 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
       height: 20,
       clipShadows: [ClipShadow(color: Colors.black45)],
       child: Container(
-        height: 130,
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).viewPadding.top, bottom: 5),
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: AppGradients.linearGradient),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: () => scaffoldKey.currentState!.openDrawer(),
-              ),
-            ),
-            const Spacer(),
-            Align(
-              alignment: Alignment.center,
-              child: Text('DAILY DOSE OF HAPPINESS',
-                  style: AppTextStyle.getHeaderTextStyle(
-                      Colors.white.withOpacity(0.6))),
-            ),
-            const Spacer(flex: 2)
-          ],
-        ),
-      ),
+          height: 130,
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).viewPadding.top, bottom: 5),
+          width: double.infinity,
+          decoration: BoxDecoration(gradient: AppGradients.linearGradient),
+          child: HeaderWidget(scaffoldKey: scaffoldKey)),
     );
   }
 

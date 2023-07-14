@@ -13,7 +13,7 @@ Karl-Arnold-Str. 31
 
 Kontaktmöglichkeiten
 E-Mail-Adresse:
-dennis.koob@hotmail.de
+invio.business@gmail.com
 
 Haftungs- und Schutzrechtshinweise
 Haftungsausschluss: Die Inhalte dieses Onlineangebotes wurden sorgfältig und nach unserem aktuellen Kenntnisstand erstellt, dienen jedoch nur der Information und entfalten keine rechtlich bindende Wirkung, sofern es sich nicht um gesetzlich verpflichtende Informationen (z.B. das Impressum, die Datenschutzerklärung, AGB oder verpflichtende Belehrungen von Verbrauchern) handelt. Wir behalten uns vor, die Inhalte vollständig oder teilweise zu ändern oder zu löschen, soweit vertragliche Verpflichtungen unberührt bleiben. Alle Angebote sind freibleibend und unverbindlich.
