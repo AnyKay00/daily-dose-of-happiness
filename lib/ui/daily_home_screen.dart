@@ -83,7 +83,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                       children: [
                         AutoSizeText(state.motivation[0].text,
                             textAlign: TextAlign.center,
-                            maxFontSize: 26,
+                            maxFontSize: 50,
                             minFontSize: 16,
                             style: const TextStyle(
                                 fontSize: 26,

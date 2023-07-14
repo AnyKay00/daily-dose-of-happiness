@@ -74,7 +74,7 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
           child: Center(
             child: AutoSizeText(state.joke[0].joke,
                 minFontSize: 16,
-                maxFontSize: 26,
+                maxFontSize: 50,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     fontSize: 26,
