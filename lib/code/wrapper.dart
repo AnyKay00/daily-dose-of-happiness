@@ -6,18 +6,25 @@ import 'package:flutter/material.dart';
 class Wrapper extends StatelessWidget {
   Wrapper({Key? key}) : super(key: key);
 
-  APICacheManager manager = APICacheManager();
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-        future: ,//auth.readLoginFlagFromStorage(),
+    return FutureBuilder<bool>(
+        future: getFile(), //auth.readLoginFlagFromStorage(),
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data == 'true') {
-            return OnboardingScreen();
+          if (snapshot.hasData && snapshot.data == true) {
+            return const OnboardingScreen();
           }
           //Navigator.of(context).pushNamed(homeRoute)
-          return NavigationScreen();
+          return const NavigationScreen();
         });
+  }
+
+  Future<bool> getFile() async {
+    APICacheManager manager = APICacheManager('agreement');
+    Map<String, dynamic>? cache = await manager.readFromFile();
+    // TODO read file properly
+    print('""""""""""');
+    print(cache);
+    return true;
   }
 }

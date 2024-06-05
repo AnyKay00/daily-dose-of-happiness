@@ -9,7 +9,9 @@ class APICacheManager {
   APICacheManager(this.cachename);
 
   Future<String?> get _localPath async {
-    final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
 
     return directory?.path;
   }
@@ -18,7 +20,9 @@ class APICacheManager {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.manageExternalStorage,
     ].request();
-    if(statuses[Permission.manageExternalStorage] != PermissionStatus.granted && !Platform.isIOS) {
+    if (statuses[Permission.manageExternalStorage] !=
+            PermissionStatus.granted &&
+        !Platform.isIOS) {
       return null;
     }
 
@@ -34,23 +38,24 @@ class APICacheManager {
   }
 
   Future<Map<String, dynamic>?> readFromFile() async {
-  try {
-    final file = await _getLocalFile();
+    try {
+      final file = await _getLocalFile();
 
-    // Read the file
-    String? content = await file?.readAsString();
-    DateTime? lastModified = await file?.lastModified();
+      // Read the file
+      String? content = await file?.readAsString();
+      print(content);
+      DateTime? lastModified = await file?.lastModified();
 
-    //if file contrent is older then one day fetch another one
-    if(content!.isEmpty || DateTime.now().day != lastModified!.day) {
+      //if file contrent is older then one day fetch another one
+      /*  if (content!.isEmpty || DateTime.now().day != lastModified!.day) {
+        return null;
+      } */
+      dynamic jsonContent = jsonDecode(content!);
+
+      return jsonContent;
+    } catch (e) {
+      // If encountering an error, return 0
       return null;
     }
-    dynamic jsonContent = jsonDecode(content);
-
-    return jsonContent;
-  } catch (e) {
-    // If encountering an error, return 0
-    return null;
   }
-}
 }

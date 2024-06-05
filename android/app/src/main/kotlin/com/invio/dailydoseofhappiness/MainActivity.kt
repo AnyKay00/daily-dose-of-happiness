@@ -1,4 +1,4 @@
-package com.example.daily_dose_of_happiness
+package com.invio.dailydoseofhappiness
 
 import io.flutter.embedding.android.FlutterActivity
 
