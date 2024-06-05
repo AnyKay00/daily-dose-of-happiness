@@ -18,7 +18,7 @@ class DailyJokeScreen extends StatefulWidget {
 }
 
 class _DailyJokeScreenState extends State<DailyJokeScreen> {
-  static GlobalKey<NavigatorState> _jokeKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _jokeKey = GlobalKey<NavigatorState>();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -38,13 +38,13 @@ class _DailyJokeScreenState extends State<DailyJokeScreen> {
   }
 
   Widget _getBody() {
-    var _height = MediaQuery.of(context).size.height -
+    var height = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewPadding.bottom -
         MediaQuery.of(context).viewPadding.top -
         kBottomNavigationBarHeight;
     return SingleChildScrollView(
       child: SizedBox(
-        height: _height,
+        height: height,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [_getHeader(), _getJoke(), _getIllustration()]),

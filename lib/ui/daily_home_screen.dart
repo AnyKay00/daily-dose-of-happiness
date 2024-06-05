@@ -18,7 +18,7 @@ class DailyHomeScreen extends StatefulWidget {
 }
 
 class _DailyHomeScreenState extends State<DailyHomeScreen> {
-  static GlobalKey<NavigatorState> _homeKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _homeKey = GlobalKey<NavigatorState>();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -89,7 +89,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                                 fontSize: 26,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600)),
-                        Text('- ' + state.motivation[0].authorName + ' -',
+                        Text('- ${state.motivation[0].authorName} -',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 16,

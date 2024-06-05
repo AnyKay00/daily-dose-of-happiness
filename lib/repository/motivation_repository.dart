@@ -7,7 +7,7 @@ import '../code/local_storage_manager.dart';
 
 class MotivationRepository {
   final String _rootUrl = 'https://zenquotes.io/api/today';  
-  APICacheManager _cacheManager = APICacheManager("motivation");
+  final APICacheManager _cacheManager = APICacheManager("motivation");
   //load daily zenquote motivation
   Future<MotivationModel?>? loadDailyMotivation() async {
     try {

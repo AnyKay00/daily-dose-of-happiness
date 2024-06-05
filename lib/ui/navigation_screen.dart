@@ -19,7 +19,7 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
-  ListQueue _navigationQueue = ListQueue();
+  final ListQueue _navigationQueue = ListQueue();
   final _pages = const <Widget>[
     DailyHomeScreen(),
     DailyJokeScreen(),
