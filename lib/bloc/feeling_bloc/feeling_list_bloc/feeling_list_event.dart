@@ -8,3 +8,6 @@ abstract class FeelingListEvent extends Equatable {
 }
 
 class LoadFeelingsEvent extends FeelingListEvent {}
+
+
+class LoadLastWeekFeelingsEvent extends FeelingListEvent {}

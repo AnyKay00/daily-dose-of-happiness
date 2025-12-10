@@ -1,6 +1,8 @@
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_state.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
@@ -51,14 +53,14 @@ class _FeedScreenState extends State<FeedScreen> {
       height: height,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Stack(children: [
-        Align(alignment: Alignment.topRight, child: _getHeader()),
         PageView.builder(
           scrollDirection: Axis.vertical,
           itemCount: 3, //dynamic?
           itemBuilder: (context, index) {
             return _getDailys(index);
           },
-        )
+        ),
+        Align(alignment: Alignment.topRight, child: _getHeader()),
       ]),
     );
   }
@@ -292,6 +294,10 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget _buildMemoryBookButton() {
     return GestureDetector(
       onTap: () {
+        //trigger bloc
+        BlocProvider.of<FeelingListBloc>(context)
+            .add(LoadLastWeekFeelingsEvent());
+
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MemoryBookScreen()));
       },
