@@ -1,4 +1,4 @@
-import 'package:daily_dose_of_happiness/model/motivation_model.dart';
+import 'package:daily_dose_of_happiness/model/dailys/motivation_model.dart';
 import 'package:equatable/equatable.dart';
 
 //abstract class for the states
@@ -13,9 +13,7 @@ abstract class MotivationState extends Equatable {
 // loaded daily motivation
 class LoadedMotivationState extends MotivationState {
   const LoadedMotivationState({required this.motivation});
-  final List<MotivationModel> motivation;
-  @override
-  List<MotivationModel> get props => motivation;
+  final MotivationModel motivation;
 }
 
 //in loading

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:daily_dose_of_happiness/code/local_storage_manager.dart';
-import 'package:daily_dose_of_happiness/code/multi_url_api_manager.dart';
-import 'package:daily_dose_of_happiness/model/joke_model.dart';
+import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
+import 'package:daily_dose_of_happiness/service/multi_url_api_manager.dart';
+import 'package:daily_dose_of_happiness/model/dailys/joke_model.dart';
 import 'package:http/http.dart';
 
 class JokeRepository {

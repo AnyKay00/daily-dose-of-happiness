@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors();
 
-  static const Color primaryColor = Color.fromARGB(255, 239, 203, 94);
+  static const Color primaryColor = Color(0xFFF7D774);
 
-  static const Color secondaryColor = Color.fromARGB(255, 236, 176, 82);
+  static const Color secondaryColor = Color(0xFF4EC5C1);
+
+  static const Color backgroundColor = Color(0xFFFAF9F7);
 
   static const Color ligthTextColor = Color.fromARGB(255, 160, 160, 160);
-  static const Color backgroundColor = Color.fromARGB(255, 240, 240, 240);
 }
 
 class AppTextStyle {
@@ -30,5 +31,12 @@ class AppGradients {
         AppColors.primaryColorGradientEnd */
         AppColors.primaryColor,
         AppColors.secondaryColor,
+      ]);
+  static LinearGradient backgroundGradient = const LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        AppColors.secondaryColor,
+        AppColors.primaryColor,
       ]);
 }

@@ -1,9 +1,14 @@
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
+import 'package:daily_dose_of_happiness/repository/feeling_repository.dart';
 import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 import 'package:daily_dose_of_happiness/repository/motivation_repository.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
-import 'package:daily_dose_of_happiness/ui/navigation_screen.dart';
+import 'package:daily_dose_of_happiness/ui/daily_home_emotion_screen.dart';
+import 'package:daily_dose_of_happiness/ui/memory_book.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +33,13 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 MotivationBloc(repository: MotivationRepository())),
         BlocProvider<JokeBloc>(
-            create: (context) => JokeBloc(repository: JokeRepository()))
+            create: (context) => JokeBloc(repository: JokeRepository())),
+        BlocProvider<FeelingListBloc>(
+          create: (context) => FeelingListBloc(repository: FeelingRepository())
+            ..add(LoadFeelingsEvent()),
+        ),
+        BlocProvider<FeelingBloc>(
+            create: (context) => FeelingBloc(repository: FeelingRepository()))
       ],
       child: MaterialApp(
         title: 'Daily dose of Happiness',
@@ -37,7 +48,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
           useMaterial3: true,
         ),
-        home: const NavigationScreen(),
+        home: const DailyHomeScreen(),
       ),
     );
   }

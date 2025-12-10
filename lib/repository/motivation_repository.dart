@@ -1,19 +1,18 @@
 import 'dart:convert';
-
-import 'package:daily_dose_of_happiness/model/motivation_model.dart';
+import 'package:daily_dose_of_happiness/model/dailys/motivation_model.dart';
 import 'package:http/http.dart';
-
-import '../code/local_storage_manager.dart';
+import '../service/local_storage_manager.dart';
 
 class MotivationRepository {
-  final String _rootUrl = 'https://zenquotes.io/api/today';  
+  final String _rootUrl = 'https://zenquotes.io/api/today';
   final APICacheManager _cacheManager = APICacheManager("motivation");
   //load daily zenquote motivation
   Future<MotivationModel?>? loadDailyMotivation() async {
     try {
       Map<String, dynamic>? cache = await _cacheManager.readFromFile();
       if (cache == null) {
-        Response response = await get(Uri.parse(_rootUrl), headers: {'Accept': 'application/json'});
+        Response response = await get(Uri.parse(_rootUrl),
+            headers: {'Accept': 'application/json'});
         if (response.statusCode == 200) {
           Iterable body = jsonDecode(utf8.decode(response.bodyBytes));
           MotivationModel motivation = MotivationModel.fromJson(body.first);
@@ -31,6 +30,6 @@ class MotivationRepository {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null; // better return Error class
-  }
+    }
   }
 }

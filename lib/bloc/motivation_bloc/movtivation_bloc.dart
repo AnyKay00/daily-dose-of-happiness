@@ -14,7 +14,7 @@ class MotivationBloc extends Bloc<MotivationEvent, MotivationState> {
         final response = await repository.loadDailyMotivation();
         //set state to success
         if (response != null) {
-          emit((LoadedMotivationState(motivation: [response])));
+          emit((LoadedMotivationState(motivation: response)));
         }
         //set state to fail
         else {
