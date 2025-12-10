@@ -14,7 +14,7 @@ class JokeBloc extends Bloc<JokeEvent, JokeState> {
         final response = await repository.loadDailyJoke();
         //set state to success
         if (response != null) {
-          emit((LoadedJokeState(joke: [response])));
+          emit((LoadedJokeState(joke: response)));
         }
         //set state to fail
         else {

@@ -12,9 +12,7 @@ abstract class JokeState extends Equatable {
 // loaded daily motivation
 class LoadedJokeState extends JokeState {
   const LoadedJokeState({required this.joke});
-  final List<JokeModel> joke;
-  @override
-  List<JokeModel> get props => joke;
+  final JokeModel joke;
 }
 
 // in loading

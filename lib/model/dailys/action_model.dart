@@ -1,14 +1,14 @@
 class ActionModel {
   String id;
-  String action;
+  String actionText;
   bool liked = false;
   bool saved = false;
 
-  ActionModel({required this.id, required this.action});
+  ActionModel({required this.id, required this.actionText});
 
   factory ActionModel.fromJson(Map<String, dynamic> json) {
     return ActionModel(
         id: json['id']?.toString() ?? '',
-        action: json['action']?.toString() ?? '');
+        actionText: json['action_text']?.toString() ?? '');
   }
 }

@@ -1,5 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:clippy_flutter/clippy_flutter.dart';
+import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/action_bloc/action_state.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
@@ -7,10 +7,8 @@ import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.da
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/memory_book.dart';
 import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
-import 'package:daily_dose_of_happiness/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -69,6 +67,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return BlocBuilder<MotivationBloc, MotivationState>(
         builder: (context, state) {
       if (state is LoadedMotivationState) {
+        bool isLiked = state.motivation.liked ?? false;
         return Stack(
           children: [
             Center(
@@ -80,30 +79,32 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
             Positioned(
-            right: 16,
-            bottom: 100, // Positioned slightly above the bottom edge
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // LIKE BUTTON
-                _buildActionButton(
-                  icon: isLiked ? Icons.favorite : Icons.favorite_border,
-                  color: isLiked ? Colors.red : Colors.white,
-                  label: "$likeCount",
-                  onTap: _toggleLike,
-                ),
-                const SizedBox(height: 25),
-                
-                // SHARE BUTTON 
-                _buildActionButton(
-                  icon: Icons.share,
-                  color: Colors.white,
-                  label: "Share",
-                  onTap: () {},
-                ),
-              ],
+              right: 16,
+              bottom: 100, // Positioned slightly above the bottom edge
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // LIKE BUTTON
+                  _buildActionButton(
+                      id: state.motivation.id,
+                      icon: isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: isLiked ? Colors.red : Colors.white,
+                      label: "like",
+                      onTap: () {}),
+
+                  const SizedBox(height: 25),
+
+                  // SHARE BUTTON
+                  _buildActionButton(
+                    id: state.motivation.id,
+                    icon: Icons.share,
+                    color: Colors.white,
+                    label: "Share",
+                    onTap: () {},
+                  ),
+                ],
+              ),
             ),
-          ),
           ],
         );
       }
@@ -112,7 +113,96 @@ class _FeedScreenState extends State<FeedScreen> {
     });
   }
 
- Widget _buildActionButton({
+  Widget _getJokeContainer() {
+    return BlocBuilder<JokeBloc, JokeState>(builder: (context, state) {
+      if (state is LoadedJokeState) {
+        bool isLiked = state.joke.liked ?? false;
+        return Stack(
+          children: [
+            Center(
+              child: Text(state.joke.joke),
+            ),
+            Positioned(
+              right: 16,
+              bottom: 100, // Positioned slightly above the bottom edge
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // LIKE BUTTON
+                  _buildActionButton(
+                      id: state.joke.id,
+                      icon: isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: isLiked ? Colors.red : Colors.white,
+                      label: "like",
+                      onTap: () {}),
+
+                  const SizedBox(height: 25),
+
+                  // SHARE BUTTON
+                  _buildActionButton(
+                    id: state.joke.id,
+                    icon: Icons.share,
+                    color: Colors.white,
+                    label: "Share",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+      //Todo
+      return Container();
+    });
+  }
+
+  Widget _getActionContainer() {
+    return BlocBuilder<ActionBloc, ActionState>(builder: (context, state) {
+      if (state is LoadedActionState) {
+        bool isLiked = state.action.liked ?? false;
+        return Stack(
+          children: [
+            Center(
+              child: Text(state.action.actionText),
+            ),
+            Positioned(
+              right: 16,
+              bottom: 100, // Positioned slightly above the bottom edge
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // LIKE BUTTON
+                  _buildActionButton(
+                      id: state.action.id,
+                      icon: isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: isLiked ? Colors.red : Colors.white,
+                      label: "like",
+                      onTap: () {}),
+
+                  const SizedBox(height: 25),
+
+                  // SHARE BUTTON
+                  _buildActionButton(
+                    id: state.action.id,
+                    icon: Icons.share,
+                    color: Colors.white,
+                    label: "Share",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+      //Todo
+      return Container();
+    });
+  }
+
+  Widget _buildActionButton({
+    required String id,
     required IconData icon,
     required Color color,
     required String label,
@@ -126,7 +216,8 @@ class _FeedScreenState extends State<FeedScreen> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.black.withOpacity(0.4), // Semi-transparent background
+              color:
+                  Colors.black.withOpacity(0.4), // Semi-transparent background
             ),
             child: Icon(icon, size: 35, color: color),
           ),
@@ -167,40 +258,6 @@ class _FeedScreenState extends State<FeedScreen> {
               MaterialPageRoute(
                   builder: (context) => const MemoryBookScreen()));
         },
-      ),
-    );
-  }
-
-  Widget _getJoke() {
-    return BlocBuilder<JokeBloc, JokeState>(builder: (context, state) {
-      if (state is LoadedJokeState) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10.0),
-          child: Center(
-            child: AutoSizeText(state.joke[0].joke,
-                minFontSize: 16,
-                maxFontSize: 50,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 26,
-                    color: AppColors.ligthTextColor,
-                    fontWeight: FontWeight.w500)),
-          ),
-        );
-      }
-      return Container();
-    });
-  }
-
-  Widget _getIllustration() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: SvgPicture.asset(
-          'assets/nature.svg',
-          width: MediaQuery.of(context).size.width / 2.5,
-        ),
       ),
     );
   }

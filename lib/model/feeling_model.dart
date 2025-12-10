@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum FeelingEnum { happy, sad, angry, anxious, calm, motivated }
+enum FeelingEnum { happy, sad, afraid, stressed, calm, motivated, tiered }
 
 class FeelingModel {
   String id;
