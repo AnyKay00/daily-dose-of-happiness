@@ -10,6 +10,8 @@ class AppColors {
   static const Color backgroundColor = Color(0xFFFAF9F7);
 
   static const Color ligthTextColor = Color.fromARGB(255, 160, 160, 160);
+
+  static const Color likeColor = Color.fromARGB(255, 205, 85, 85);
 }
 
 class AppTextStyle {

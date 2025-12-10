@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
@@ -11,24 +13,36 @@ import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
+import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
+import 'package:daily_dose_of_happiness/service/const_variables.dart';
+import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class DailyHomeScreen extends StatefulWidget {
-  const DailyHomeScreen({super.key});
+  int selectedFeelingCount = 0;
+  DailyHomeScreen({super.key, required this.selectedFeelingCount});
 
   @override
   State<DailyHomeScreen> createState() => _DailyHomeScreenState();
 }
 
 class _DailyHomeScreenState extends State<DailyHomeScreen> {
+  late APICacheManager cacheManager;
+
+  @override
+  void didChangeDependencies() {
+    cacheManager = Provider.of<APICacheManager>(context, listen: false);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // BlocListener für einmalige Aktionen (wie SnackBar anzeigen)
       body: BlocBuilder<FeelingListBloc, FeelingListState>(
         builder: (context, state) {
           if (state is LoadingFeelingListState || state is InitFeelingState) {
@@ -70,7 +84,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   // --- UI PART 1: INTRO SCREEN ---
   Widget _buildIntroPage() {
     return Container(
-      color: AppColors.backgroundColor,
+      decoration: BoxDecoration(gradient: AppGradients.backgroundGradient),
       padding: EdgeInsets.only(
           top: MediaQuery.paddingOf(context).top + 20,
           bottom: MediaQuery.paddingOf(context).bottom + 20,
@@ -80,18 +94,15 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               "Daily Check-in",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: AppColors.ligthTextColor,
-                  fontWeight: FontWeight.bold),
+              style: AppTextStyle.getdynamicTextStyle(Colors.black87, 20),
             ),
             Spacer(),
-            const Text(
+            Text(
               "Wie geht es dir heute?",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900),
+              style: AppTextStyle.getdynamicTextStyle(Colors.black87, 36),
             ),
             Spacer(),
             Text(
@@ -161,17 +172,21 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                     ),
                   ),
                   onPressed: () {
+                    //increment chosed feeling to cache
+                    int newCounter = widget.selectedFeelingCount + 1;
+                    Map<String, String> json = {
+                      'date': DateTime.now().toIso8601String(),
+                      'counter': newCounter.toString()
+                    };
+                    cacheManager.write(feelingSelectedCountK, jsonEncode(json));
                     //save daily feeling
                     BlocProvider.of<FeelingBloc>(context).add(
                       SendDailyFeelingsEvent(feelingId: feeling.id),
                     );
                     //trigger loading dailys
-                    BlocProvider.of<MotivationBloc>(context)
-                        .add(LoadMotivationEvent());
-                    BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
-                    BlocProvider.of<ActionBloc>(context).add(LoadActionEvent());
+                    DailysBlocHandler.triggerDalysBlocEvents(context);
                     //navigate to feed
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const FeedScreen()),

@@ -38,6 +38,7 @@ dependencies:
   clippy_flutter: ^2.0.0-nullsafety.1
   flutter_svg: ^1.1.6
   flutter_bloc: ^8.1.2
+  provider: ^6.0.3
   #launcher icon package
   flutter_launcher_icons: ^0.13.1
   #splash screen 

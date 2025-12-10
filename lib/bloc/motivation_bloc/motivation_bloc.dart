@@ -28,5 +28,19 @@ class MotivationBloc extends Bloc<MotivationEvent, MotivationState> {
         emit(FailedLoadMotivationState());
       }
     });
+    on<SaveMotivationToMemoryBookEvent>((event, emit) async {
+      try {
+        repository.saveMotivationToMemoryBook(event.id);
+      } catch (_) {
+        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+      }
+    });
+    on<LikeMotivationEvent>((event, emit) async {
+      try {
+        repository.likeMotivationToMemoryBook(event.id);
+      } catch (_) {
+        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+      }
+    });
   }
 }

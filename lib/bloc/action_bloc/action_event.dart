@@ -8,3 +8,13 @@ abstract class ActionEvent extends Equatable {
 }
 
 class LoadActionEvent extends ActionEvent {}
+
+class SaveActionToMemoryBookEvent extends ActionEvent {
+  final String id;
+  const SaveActionToMemoryBookEvent({required this.id});
+}
+
+class LikeActionEvent extends ActionEvent {
+  final String id;
+  const LikeActionEvent({required this.id});
+}

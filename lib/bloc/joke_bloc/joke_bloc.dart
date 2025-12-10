@@ -7,7 +7,6 @@ import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 class JokeBloc extends Bloc<JokeEvent, JokeState> {
   JokeRepository repository;
   JokeBloc({required this.repository}) : super(LoadingJokeState()) {
-    //overrides event handler - on function, one handler per event
     on<LoadJokeEvent>((event, emit) async {
       //set state to loading
       emit(LoadingJokeState());
@@ -26,6 +25,21 @@ class JokeBloc extends Bloc<JokeEvent, JokeState> {
       } catch (_) {
         //set state to fail
         emit(FailedLoadJokeState());
+      }
+    });
+
+    on<SaveJokeToMemoryBookEvent>((event, emit) async {
+      try {
+        repository.saveJokeToMemoryBook(event.id);
+      } catch (_) {
+        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+      }
+    });
+    on<LikeJokeEvent>((event, emit) async {
+      try {
+        repository.likeJokeToMemoryBook(event.id);
+      } catch (_) {
+        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
       }
     });
   }

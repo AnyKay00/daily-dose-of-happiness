@@ -8,3 +8,13 @@ abstract class MotivationEvent extends Equatable {
 }
 
 class LoadMotivationEvent extends MotivationEvent {}
+
+class SaveMotivationToMemoryBookEvent extends MotivationEvent {
+  final String id;
+  const SaveMotivationToMemoryBookEvent({required this.id});
+}
+
+class LikeMotivationEvent extends MotivationEvent {
+  final String id;
+  const LikeMotivationEvent({required this.id});
+}

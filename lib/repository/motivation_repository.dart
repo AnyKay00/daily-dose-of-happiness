@@ -39,4 +39,26 @@ class MotivationRepository {
       return null; // better return Error class
     }
   }
+
+  void saveMotivationToMemoryBook(String id) async {
+    String _baseUrl = _rootUrl + '/motivation/save/$id/';
+    try {
+      Response response = await put(Uri.parse(_baseUrl),
+          headers: {'Accept': 'application/json'});
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  void likeMotivationToMemoryBook(String id) async {
+    String _baseUrl = _rootUrl + '/motivation/like/$id/';
+    try {
+      Response response = await put(Uri.parse(_baseUrl),
+          headers: {'Accept': 'application/json'});
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
 }

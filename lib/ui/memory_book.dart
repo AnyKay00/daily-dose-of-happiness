@@ -10,6 +10,6 @@ class MemoryBookScreen extends StatefulWidget {
 class _MemoryBookScreenState extends State<MemoryBookScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }

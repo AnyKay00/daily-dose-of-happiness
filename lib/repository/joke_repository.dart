@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 
 class JokeRepository {
   late APICacheManager jokeCacheManager;
+  final String _rootUrl = 'https:/...';
 
   MultiUrlApiManager multiUrlManager = MultiUrlApiManager();
 
@@ -44,6 +45,28 @@ class JokeRepository {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null; // better return Error class
+    }
+  }
+
+  void saveJokeToMemoryBook(String id) async {
+    String _baseUrl = _rootUrl + '/joke/save/$id/';
+    try {
+      Response response = await put(Uri.parse(_baseUrl),
+          headers: {'Accept': 'application/json'});
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  void likeJokeToMemoryBook(String id) async {
+    String _baseUrl = _rootUrl + '/joke/like/$id/';
+    try {
+      Response response = await put(Uri.parse(_baseUrl),
+          headers: {'Accept': 'application/json'});
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
     }
   }
 }
