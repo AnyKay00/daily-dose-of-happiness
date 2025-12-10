@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_state.dart';
+import 'package:daily_dose_of_happiness/model/dailys/action_model.dart';
 import 'package:daily_dose_of_happiness/repository/action_repository.dart';
 
 class ActionBloc extends Bloc<ActionEvent, ActionState> {
@@ -11,7 +12,9 @@ class ActionBloc extends Bloc<ActionEvent, ActionState> {
       //set state to loading
       emit(LoadingActionState());
       try {
-        final response = await repository.loadDailyAction();
+        final response =
+            ActionModel(id: 'id', actionText: 'Atme zweimal tief ein und aus');
+        //await repository.loadDailyAction();
         //set state to success
         if (response != null) {
           emit((LoadedActionState(action: response)));

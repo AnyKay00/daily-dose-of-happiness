@@ -14,6 +14,9 @@ class AppColors {
 
 class AppTextStyle {
   const AppTextStyle();
+  static TextStyle getdynamicTextStyle(Color clr, double size) {
+    return TextStyle(fontSize: size, color: clr, fontFamily: 'Montserrat');
+  }
 
   static TextStyle getHeaderTextStyle(Color clr) {
     return TextStyle(fontSize: 18, color: clr);

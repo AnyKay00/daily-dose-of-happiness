@@ -1,11 +1,20 @@
+import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_state.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_lisT_state.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
+import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/feed_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyHomeScreen extends StatefulWidget {
@@ -81,12 +90,20 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             Spacer(),
             const Text(
               "Wie geht es dir heute?",
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900),
             ),
             Spacer(),
-            const Text("Swipe to start"),
+            Text(
+              "scroll",
+              style: AppTextStyle.getdynamicTextStyle(Colors.black, 16),
+            ),
             Icon(Icons.keyboard_double_arrow_down,
-                size: 40, color: Colors.grey[800]),
+                    size: 40, color: Colors.grey[800])
+                .animate(
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                )
+                .moveY(end: 10, duration: 900.ms),
           ],
         ),
       ),
@@ -110,16 +127,19 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'asset/feelings/pina_${feeling.feelingName.name}.png',
+                    'assets/feelings/pina_${feeling.feelingName.name}.png',
                     width: MediaQuery.sizeOf(context).width / 2.5,
                   ),
                   const SizedBox(height: 30),
-                  Text(
-                    feeling.feelingName.name,
-                    style: const TextStyle(
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87),
+                  Center(
+                    child: Text(
+                      feeling.feelingName.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Montserrat',
+                          color: Colors.black87),
+                    ),
                   ),
                 ],
               ),
@@ -131,16 +151,25 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
               left: 20,
               right: 20,
               child: SizedBox(
-                height: 55,
+                height: 60,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
+                    shadowColor: Colors.black45,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   onPressed: () {
                     //save daily feeling
+                    BlocProvider.of<FeelingBloc>(context).add(
+                      SendDailyFeelingsEvent(feelingId: feeling.id),
+                    );
+                    //trigger loading dailys
+                    BlocProvider.of<MotivationBloc>(context)
+                        .add(LoadMotivationEvent());
+                    BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
+                    BlocProvider.of<ActionBloc>(context).add(LoadActionEvent());
                     //navigate to feed
                     Navigator.push(
                       context,

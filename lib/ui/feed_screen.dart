@@ -3,7 +3,7 @@ import 'package:daily_dose_of_happiness/bloc/action_bloc/action_state.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
-import 'package:daily_dose_of_happiness/bloc/motivation_bloc/movtivation_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/memory_book.dart';
 import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';

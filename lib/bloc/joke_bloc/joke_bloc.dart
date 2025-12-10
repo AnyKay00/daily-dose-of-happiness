@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
+import 'package:daily_dose_of_happiness/model/dailys/joke_model.dart';
 import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 
 class JokeBloc extends Bloc<JokeEvent, JokeState> {
@@ -11,7 +12,9 @@ class JokeBloc extends Bloc<JokeEvent, JokeState> {
       //set state to loading
       emit(LoadingJokeState());
       try {
-        final response = await repository.loadDailyJoke();
+        final response = JokeModel(
+            id: 'id', joke: 'Was macht ein Keks unter einem Baum? Krümel');
+        //await repository.loadDailyJoke();
         //set state to success
         if (response != null) {
           emit((LoadedJokeState(joke: response)));

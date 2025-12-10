@@ -24,7 +24,7 @@ class FeelingRepository {
   }
 
   Future sendDailyFeeling(String feelingId) async {
-    String baseUrl = '${_rootUrl}feelings/set-daily/$feelingId/';
+    /*  String baseUrl = '${_rootUrl}feelings/set-daily/$feelingId/';
 
     try {
       Response response = await put(Uri.parse(_rootUrl),
@@ -40,6 +40,6 @@ class FeelingRepository {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;
-    }
+    } */
   }
 }
