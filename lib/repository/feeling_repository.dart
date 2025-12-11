@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
+import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:http/http.dart';
 
 class FeelingRepository {
-  final String _rootUrl = '...';
-
   Future<List<FeelingModel>?>? loadFeelings() async {
     try {
-      Response response = await get(Uri.parse(_rootUrl),
-          headers: {'Accept': 'application/json'});
+      Response response =
+          await get(Uri.parse(baseUrl), headers: buildHttpsHeader());
       if (response.statusCode == 200) {
         Iterable body = jsonDecode(utf8.decode(response.bodyBytes));
         List<FeelingModel> feelings =
@@ -24,11 +23,11 @@ class FeelingRepository {
   }
 
   Future sendDailyFeeling(String feelingId) async {
-    /*  String baseUrl = '${_rootUrl}feelings/set-daily/$feelingId/';
+    /*  String _baseUrl = '${baseUrl}feelings/set-daily/$feelingId/';
 
     try {
-      Response response = await put(Uri.parse(_rootUrl),
-          headers: {'Accept': 'application/json'});
+      Response response = await put(Uri.parse(_baseUrl),
+          headers: buildHttpsHeader());
       if (response.statusCode == 200) {
         Iterable body = jsonDecode(utf8.decode(response.bodyBytes));
         List<FeelingModel> feelings =

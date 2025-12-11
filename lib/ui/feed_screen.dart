@@ -23,6 +23,30 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  bool _showIntro = true;
+  double _introOpacity = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Kurze Zeit anzeigen, dann ausblenden
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
+      setState(() {
+        _introOpacity = 0.0;
+      });
+
+      // Nach dem Fade-Out komplett entfernen
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
+        setState(() {
+          _showIntro = false;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +85,63 @@ class _FeedScreenState extends State<FeedScreen> {
           },
         ),
         Align(alignment: Alignment.topRight, child: _getHeader()),
+
+        // Intro-Overlay mit Pina + Sprechblase
+        if (_showIntro)
+          Positioned(
+            top: height / 3.5,
+            right: 0,
+            left: 0,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: _introOpacity,
+              child: _buildIntroOverlay(),
+            ),
+          ),
       ]),
+    );
+  }
+
+  /// Overlay mit pina_happy und Sprechblase
+  Widget _buildIntroOverlay() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Bild von Pina
+          Image.asset(
+            'assets/feelings/pina_happy.png',
+            height: 120,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(width: 16),
+          // Sprechblase
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(20),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Text(
+                "Ich habe dir dein Happiness Paket zusammengestellt",
+                style: AppTextStyle.getdynamicTextStyle(
+                  Colors.black87,
+                  18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

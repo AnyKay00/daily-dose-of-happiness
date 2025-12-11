@@ -8,6 +8,8 @@ import 'package:daily_dose_of_happiness/repository/action_repository.dart';
 import 'package:daily_dose_of_happiness/repository/feeling_repository.dart';
 import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 import 'package:daily_dose_of_happiness/repository/motivation_repository.dart';
+import 'package:daily_dose_of_happiness/service/auth_service.dart';
+import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
@@ -15,8 +17,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: baseUrl,
+    anonKey: apiKey,
+  );
+  final AuthService authService = await AuthService.init();
+
+  // Prüfen ob Guest bereits existiert
+  final existing = await authService.readGuestId();
+
+  if (existing.isEmpty) {
+    final newId = await authService.createGuestUser();
+    print("Neuer Guest User: $newId");
+  } else {
+    print("Bestehender Guest User: $existing");
+  }
+
   runApp(const MyApp());
 }
 
