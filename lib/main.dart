@@ -21,7 +21,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
+  /* await Supabase.initialize(
     url: baseUrl,
     anonKey: apiKey,
   );
@@ -35,7 +35,7 @@ void main() async {
     print("Neuer Guest User: $newId");
   } else {
     print("Bestehender Guest User: $existing");
-  }
+  } */
 
   runApp(const MyApp());
 }

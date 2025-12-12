@@ -12,6 +12,9 @@ class AppColors {
   static const Color ligthTextColor = Color.fromARGB(255, 160, 160, 160);
 
   static const Color likeColor = Color.fromARGB(255, 205, 85, 85);
+
+  static const Color pinaBlue = Color(0xFFC4D6F9);
+  static const Color pinaBlueLight = Color(0xFFDBE6FB);
 }
 
 class AppTextStyle {
@@ -21,7 +24,7 @@ class AppTextStyle {
   }
 
   static TextStyle getHeaderTextStyle(Color clr) {
-    return TextStyle(fontSize: 18, color: clr);
+    return TextStyle(fontSize: 26, color: clr, fontFamily: 'Montserrat');
   }
 }
 
@@ -43,5 +46,16 @@ class AppGradients {
       colors: [
         AppColors.secondaryColor,
         AppColors.primaryColor,
+      ]);
+  static LinearGradient pinaGradient = const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
+      /*  stops: [
+        0.1,
+        0.9999
+      ], */
+      colors: [
+        Colors.white,
+        AppColors.pinaBlueLight,
       ]);
 }

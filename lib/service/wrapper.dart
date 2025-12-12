@@ -5,6 +5,7 @@ import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/ui/daily_home_emotion_screen.dart';
 import 'package:daily_dose_of_happiness/ui/feed_screen.dart';
+import 'package:daily_dose_of_happiness/ui/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,16 +48,12 @@ class _WrapperState extends State<Wrapper> {
           final now = DateTime.now();
           // Fallback: wenn kein gültiges Datum → behandle wie heute
           savedDate ??= now;
-          print(savedDate);
 
           // Nur Tag/Monat/Jahr vergleichen (ohne Uhrzeit)
           final todayDay = DateTime(now.year, now.month, now.day);
           final savedDay =
               DateTime(savedDate.year, savedDate.month, savedDate.day);
-          // -----------------------------
-          // FALL 1: Datum liegt in der Vergangenheit
-          // → immer DailyHomeScreen
-          // -----------------------------
+
           if (savedDay.isBefore(todayDay)) {
             return DailyHomeScreen(selectedFeelingCount: 0);
           }
@@ -80,8 +77,7 @@ class _WrapperState extends State<Wrapper> {
           return const FeedScreen();
         }
         //data is empty -> first time user
-        //return const OnboardingScreen();
-        return DailyHomeScreen(selectedFeelingCount: 0);
+        return const OnboardingScreen();
       },
     );
   }

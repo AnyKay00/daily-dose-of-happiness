@@ -13,6 +13,7 @@ import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/memory_book.dart';
 import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -114,14 +115,17 @@ class _FeedScreenState extends State<FeedScreen> {
             'assets/feelings/pina_happy.png',
             height: 120,
             fit: BoxFit.cover,
-          ),
+          )
+              .animate(onPlay: (c) => c.repeat(reverse: true))
+              .moveY(end: 8, duration: 1.seconds)
+              .rotate(end: 0.02, begin: -0.02),
           const SizedBox(width: 16),
           // Sprechblase
           Flexible(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white,
+                gradient: AppGradients.pinaGradient,
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
