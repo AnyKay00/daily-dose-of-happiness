@@ -26,6 +26,7 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   bool _showIntro = true;
   double _introOpacity = 1.0;
+  int _pageIndex = 0;
 
   @override
   void initState() {
@@ -79,14 +80,19 @@ class _FeedScreenState extends State<FeedScreen> {
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Stack(children: [
         PageView.builder(
+          onPageChanged: (index) => setState(() => _pageIndex = index),
           scrollDirection: Axis.vertical,
           itemCount: 3, //dynamic?
           itemBuilder: (context, index) {
-            return _getDailys(index);
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _getDailys(index),
+            );
           },
         ),
         Align(alignment: Alignment.topRight, child: _getHeader()),
 
+        _DotsIndicator(count: 3, index: _pageIndex),
         // Intro-Overlay mit Pina + Sprechblase
         if (_showIntro)
           Positioned(
@@ -392,6 +398,36 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           padding: const EdgeInsets.all(15),
           child: Icon(Icons.menu_book_rounded, color: Colors.white)),
+    );
+  }
+}
+
+class _DotsIndicator extends StatelessWidget {
+  final int count;
+  final int index;
+
+  const _DotsIndicator({
+    required this.count,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(count, (i) {
+        final isActive = i == index;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          height: isActive ? 18 : 8,
+          width: 8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(99),
+            color: isActive ? AppColors.secondaryColor : Colors.white,
+          ),
+        );
+      }),
     );
   }
 }

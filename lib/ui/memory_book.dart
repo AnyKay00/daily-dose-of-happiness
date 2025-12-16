@@ -5,6 +5,8 @@ import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MemoryBookScreen extends StatefulWidget {
   const MemoryBookScreen({super.key});
@@ -14,8 +16,23 @@ class MemoryBookScreen extends StatefulWidget {
 }
 
 class _MemoryBookScreenState extends State<MemoryBookScreen> {
+  bool _activePush = false;
+
+  String version = '0.1.0';
+  String buildNumber = '1.0';
+
+  final Uri _imprintlink = Uri.parse(
+      'https://anykay00.github.io/daily-dose-of-happiness/index.html#about');
+
+  void initVersionNumber() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+  }
+
   @override
   Widget build(BuildContext context) {
+    initVersionNumber();
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
@@ -54,12 +71,13 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
           SizedBox(height: 20),
           //week feelings
           _buildWeekFeelings(),
-          Divider(height: 100),
+          Divider(height: 90),
           Text('Bald kannst du auch Daylies speichern!',
               style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
-          Divider(height: 100),
-          Text('Einstellungen',
-              style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
+          Divider(height: 80),
+          _buildSettings(),
+          Divider(height: 90),
+          _buildImprint()
           //saved dailys
           //Text('Gespeicherte Einträge',
           // style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
@@ -71,6 +89,108 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
     );
   }
 
+  Widget _buildSettings() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Einstellungen',
+            style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
+        SizedBox(height: 10),
+        //push
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Push-Benachrichtigungen',
+              style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
+            ),
+            StatefulBuilder(
+              builder: (context, setter) {
+                return Switch(
+                  value: _activePush,
+                  activeColor: Colors.green[600],
+                  activeTrackColor: Colors.green[100],
+                  onChanged: (value) {
+                    setter(() {
+                      _activePush = value;
+                    });
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'E-Mail Benachrichtigungen',
+              style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
+            ),
+            StatefulBuilder(
+              builder: (context, setter) {
+                return Switch(
+                  value: _activePush,
+                  activeColor: Colors.green[600],
+                  activeTrackColor: Colors.green[100],
+                  onChanged: (value) {
+                    setter(() {
+                      _activePush = value;
+                    });
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImprint() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        //logo and versions
+        Center(
+            child: Text('Daily Dose Of Happiness',
+                style: AppTextStyle.getdynamicTextStyle(Colors.black, 16))),
+        Center(
+            child: Text('Version: $version',
+                style: AppTextStyle.getdynamicTextStyle(Colors.black, 16))),
+        Center(
+            child: Text('Build: $version',
+                style: AppTextStyle.getdynamicTextStyle(Colors.black, 16))),
+
+        Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: Center(
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(600),
+                child: Image.asset(
+                  'assets/app_logo.png',
+                  width: 80,
+                )),
+          ),
+        ),
+
+        TextButton(
+            onPressed: () async {
+              if (!await launchUrl(_imprintlink)) {
+                throw Exception('Could not launch $_imprintlink');
+              }
+            },
+            child: const Text('Imprint')),
+        TextButton(
+            onPressed: () async {
+              if (!await launchUrl(_imprintlink)) {
+                throw Exception('Could not launch $_imprintlink');
+              }
+            },
+            child: const Text('Private Policy')),
+      ],
+    );
+  }
   /* Widget _getSavedDailys() {
     return BlocBuilder<Saved>(builder: (context, state) {
       if (state is LoadedLastWeekFeelingListState) {

@@ -1,3 +1,4 @@
+import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/daily_home_emotion_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         MaterialPageRoute(
             builder: (context) => DailyHomeScreen(
                   selectedFeelingCount: 0,
+                  dayTime: DayTime.fallback,
                 )),
       );
     }

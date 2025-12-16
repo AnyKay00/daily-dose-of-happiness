@@ -54,6 +54,7 @@ dependencies:
   url_launcher: ^6.1.11
   flutter_animate: ^4.2.0+1
   supabase_flutter: ^2.10.3
+  package_info_plus: ^8.0.2
 
 dev_dependencies:
   flutter_test:

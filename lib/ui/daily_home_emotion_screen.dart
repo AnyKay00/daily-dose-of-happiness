@@ -9,6 +9,7 @@ import 'package:daily_dose_of_happiness/model/feeling_model.dart';
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
+import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/feed_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,9 @@ import 'package:provider/provider.dart';
 
 class DailyHomeScreen extends StatefulWidget {
   int selectedFeelingCount = 0;
-  DailyHomeScreen({super.key, required this.selectedFeelingCount});
+  DayTime dayTime = DayTime.fallback;
+  DailyHomeScreen(
+      {super.key, required this.selectedFeelingCount, required this.dayTime});
 
   @override
   State<DailyHomeScreen> createState() => _DailyHomeScreenState();
@@ -93,7 +96,9 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             ),
             Spacer(),
             Text(
-              "Wie geht es dir heute?",
+              widget.selectedFeelingCount > 1
+                  ? "Wie geht es dir jetzt gerade?"
+                  : "Wie geht es dir heute?",
               textAlign: TextAlign.center,
               style: AppTextStyle.getdynamicTextStyle(Colors.black87, 36),
             ),
@@ -159,7 +164,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
-                    shadowColor: Colors.black45,
+                    shadowColor: Colors.black54,
+                    elevation: 15,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -169,7 +175,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                     int newCounter = widget.selectedFeelingCount + 1;
                     Map<String, String> json = {
                       'date': DateTime.now().toIso8601String(),
-                      'counter': newCounter.toString()
+                      'counter': newCounter.toString(),
+                      'day_time': getCurrentDayTimeEnum().name
                     };
                     cacheManager.write(feelingSelectedCountK, jsonEncode(json));
                     //save daily feeling
