@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
@@ -18,18 +17,17 @@ class JokeRepository {
     final String? rootUrl = baseUrl + '/rest/v1/joke';
     try {
       String cache = await jokeCacheManager.read(jokeK);
-      if (cache == null && cache.isEmpty) {
+      if (cache.isEmpty) {
         Response response =
             await get(Uri.parse(rootUrl!), headers: buildHttpsHeader());
         if (response.statusCode == 200) {
           dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
           JokeModel motivation = JokeModel.fromJson(body);
-          jokeCacheManager.write(jokeK, body.toString());
+          jokeCacheManager.write(jokeK, jsonEncode(body));
 
           return motivation;
         } else {
-          //TODO Errorclass zurückgeben?
-          throw Exception('Failed to get joke from jokeapi');
+          throw Exception('Failed to get joke from api');
         }
       } else {
         JokeModel motivation = JokeModel.fromJson(jsonDecode(cache));

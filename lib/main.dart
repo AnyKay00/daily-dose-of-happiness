@@ -2,6 +2,7 @@ import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
 import 'package:daily_dose_of_happiness/repository/action_repository.dart';
@@ -21,11 +22,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  /* await Supabase.initialize(
+  await Supabase.initialize(
     url: baseUrl,
     anonKey: apiKey,
   );
-  final AuthService authService = await AuthService.init();
+  /*final AuthService authService = await AuthService.init();
 
   // Prüfen ob Guest bereits existiert
   final existing = await authService.readGuestId();
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     APICacheManager cacheManager = APICacheManager();
+    final feelingRepo = FeelingRepository(cacheManager);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -68,13 +70,14 @@ class MyApp extends StatelessWidget {
                   create: (context) =>
                       ActionBloc(repository: ActionRepository(cacheManager))),
               BlocProvider<FeelingListBloc>(
-                create: (context) =>
-                    FeelingListBloc(repository: FeelingRepository())
-                      ..add(LoadFeelingsEvent()),
+                create: (context) => FeelingListBloc(repository: feelingRepo)
+                  ..add(LoadFeelingsEvent()),
               ),
               BlocProvider<FeelingBloc>(
+                  create: (context) => FeelingBloc(repository: feelingRepo)),
+              BlocProvider<HappinessPackBloc>(
                   create: (context) =>
-                      FeelingBloc(repository: FeelingRepository()))
+                      HappinessPackBloc(repository: feelingRepo))
             ],
             child: MaterialApp(
               title: 'Daily dose of Happiness',

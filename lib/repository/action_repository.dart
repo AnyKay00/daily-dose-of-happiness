@@ -16,8 +16,8 @@ class ActionRepository {
   //load daily zenquote motivation
   Future<ActionModel?>? loadDailyAction() async {
     try {
-      String? cache = await _cacheManager.read(actionK);
-      if (cache == null) {
+      String cache = await _cacheManager.read(actionK);
+      if (cache.isEmpty) {
         Response response =
             await get(Uri.parse(baseUrl), headers: buildHttpsHeader());
         if (response.statusCode == 200) {
@@ -26,7 +26,6 @@ class ActionRepository {
           _cacheManager.write(actionK, body.first.toString());
           return motivation;
         } else {
-          
           throw Exception('Failed to get Action from zenquote');
         }
       } else {
@@ -36,7 +35,7 @@ class ActionRepository {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      return null; 
+      return null;
     }
   }
 

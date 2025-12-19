@@ -53,7 +53,7 @@ dependencies:
   equatable: ^2.0.5
   url_launcher: ^6.1.11
   flutter_animate: ^4.2.0+1
-  supabase_flutter: ^2.10.3
+  supabase_flutter: ^2.12.0
   package_info_plus: ^8.0.2
 
 dev_dependencies:
@@ -153,7 +153,7 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    image: assets/splashscreen-logo.png
+    #image: assets/splashscreen-logo.png
 
     # Splash screen background color.
     color: "#EFCB5E"
@@ -162,7 +162,7 @@ flutter_native_splash:
     #icon_background_color: "#111111"
 
     # The branding property allows you to specify an image used as branding in the splash screen.
-    #branding: assets/dart.png
+    branding: "assets/splashscreen.png"
 
     # The image_dark, color_dark, icon_background_color_dark, and branding_dark set values that
     # apply when the device is in dark mode. If they are not specified, the app will use the

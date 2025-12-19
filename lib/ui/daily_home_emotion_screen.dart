@@ -5,8 +5,9 @@ import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_s
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_state.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_event.dart';
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
-import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
@@ -174,6 +175,9 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
               right: 20,
               child: SizedBox(
                 height: 60,
+                width: MediaQuery.sizeOf(context).width > 700
+                    ? MediaQuery.sizeOf(context).width / 1.5
+                    : double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
@@ -196,19 +200,20 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                     BlocProvider.of<FeelingBloc>(context).add(
                       SendDailyFeelingsEvent(feelingId: feeling.id),
                     );
-                    //trigger loading dailys
-                    DailysBlocHandler.triggerDalysBlocEvents(context);
+                    // oldDailysBlocHandler.triggerDalysBlocEvents(context);
+                    //get happinesspack
+                    BlocProvider.of<HappinessPackBloc>(context).add(
+                        GetHappinessPackOfFeelingEvent(feelingId: feeling.id));
                     //navigate to feed
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const FeedScreen()),
                     );
-                    //trigger bloc event with feeling id
                   },
                   child: const Text(
                     "Auswählen",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                 ),
               ),

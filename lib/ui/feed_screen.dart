@@ -1,17 +1,16 @@
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
-import 'package:daily_dose_of_happiness/bloc/action_bloc/action_state.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_state.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
-import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
-import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_state.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
+import 'package:daily_dose_of_happiness/model/dailys/happiness_package_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/memory_book.dart';
-import 'package:daily_dose_of_happiness/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +26,7 @@ class _FeedScreenState extends State<FeedScreen> {
   bool _showIntro = true;
   double _introOpacity = 1.0;
   int _pageIndex = 0;
+  late HappinessPackModel hPack;
 
   @override
   void initState() {
@@ -52,10 +52,18 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      drawer: AppDrawer(),
-      backgroundColor: AppColors.backgroundColor,
-      body: _getBody(),
+      backgroundColor: AppColors.primaryColor,
+      body: BlocBuilder<HappinessPackBloc, HappinessPackState>(
+          builder: (context, state) {
+        if (state is LoadedHappinessPackState) {
+          hPack = state.pack;
+          return _getBody();
+        } else if (state is LoadingHappinessPackState) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return SizedBox();
+        }
+      }),
     );
   }
 
@@ -63,6 +71,7 @@ class _FeedScreenState extends State<FeedScreen> {
     switch (index) {
       case 0:
         return _getMotivationContainer();
+
       case 1:
         return _getJokeContainer();
       case 2:
@@ -156,59 +165,53 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget _getMotivationContainer() {
-    return BlocBuilder<MotivationBloc, MotivationState>(
-        builder: (context, state) {
-      if (state is LoadedMotivationState) {
-        bool isLiked = state.motivation.liked;
-        bool isSaved = state.motivation.saved;
-        return StatefulBuilder(builder: (context, setter) {
-          return Stack(
-            children: [
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      state.motivation.text,
-                      textAlign: TextAlign.center,
-                      style:
-                          AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
-                    ),
-                    if (state.motivation.authorName.isNotEmpty)
-                      Text('- ' + state.motivation.authorName,
-                          style: AppTextStyle.getdynamicTextStyle(
-                              Colors.black45, 20)),
-                  ],
-                ),
+    if (hPack.motivation != null) {
+      bool isLiked = false;
+      bool isSaved = false;
+      return StatefulBuilder(builder: (context, setter) {
+        return Stack(
+          children: [
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    hPack.motivation!.text,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
+                  ),
+                  if (hPack.motivation!.authorName.isNotEmpty)
+                    Text('- ${hPack.motivation!.authorName}',
+                        style: AppTextStyle.getdynamicTextStyle(
+                            Colors.black45, 20)),
+                ],
               ),
-              _getBottomText('Daily Motivation #' + state.motivation.id),
-              _getButtons(isLiked, isSaved, state.motivation.id, () {
-                setter(() {
-                  isLiked = !isLiked;
-                });
-                BlocProvider.of<MotivationBloc>(context)
-                    .add(LikeMotivationEvent(
-                  id: state.motivation.id,
-                ));
-              }, () {
-                setter(() {
-                  isSaved = !isSaved;
-                });
-                BlocProvider.of<MotivationBloc>(context)
-                    .add(SaveMotivationToMemoryBookEvent(
-                  id: state.motivation.id,
-                ));
-              })
-            ],
-          );
-        });
-      } else if (state is LoadingMotivationState) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      //Todo
-      return Container();
-    });
+            ),
+            _getBottomText('Daily Motivation #${hPack.motivation!.id}'),
+            _getButtons(isLiked, isSaved, hPack.motivation!.id, () {
+              setter(() {
+                isLiked = !isLiked;
+              });
+              BlocProvider.of<MotivationBloc>(context).add(LikeMotivationEvent(
+                id: hPack.motivation!.id,
+              ));
+            }, () {
+              setter(() {
+                isSaved = !isSaved;
+              });
+              BlocProvider.of<MotivationBloc>(context)
+                  .add(SaveMotivationToMemoryBookEvent(
+                id: hPack.motivation!.id,
+              ));
+            })
+          ],
+        );
+      });
+    } else {
+      //TODO Error
+      return SizedBox();
+    }
   }
 
   Widget _getBottomText(String text) {
@@ -224,85 +227,82 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget _getJokeContainer() {
-    return BlocBuilder<JokeBloc, JokeState>(builder: (context, state) {
-      if (state is LoadedJokeState) {
-        bool isLiked = state.joke.liked;
-        bool isSaved = state.joke.saved;
-        return StatefulBuilder(builder: (context, setter) {
-          return Stack(
-            children: [
-              Center(
-                child: Text(
-                  state.joke.joke,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
-                ),
+    if (hPack.joke != null) {
+      bool isLiked = hPack.joke!.liked;
+      bool isSaved = hPack.joke!.saved;
+      return StatefulBuilder(builder: (context, setter) {
+        return Stack(
+          children: [
+            Center(
+              child: Text(
+                hPack.joke!.joke,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
               ),
-              _getBottomText('Daily Joke #' + state.joke.id),
-              _getButtons(isLiked, isSaved, state.joke.id, () {
-                setter(() {
-                  isLiked = !isLiked;
-                });
-                BlocProvider.of<JokeBloc>(context).add(LikeJokeEvent(
-                  id: state.joke.id,
-                ));
-              }, () {
-                setter(() {
-                  isSaved = !isSaved;
-                });
-                BlocProvider.of<JokeBloc>(context)
-                    .add(SaveJokeToMemoryBookEvent(
-                  id: state.joke.id,
-                ));
-              })
-            ],
-          );
-        });
-      }
-      //Todo
-      return Container();
-    });
+            ),
+            _getBottomText('Daily Joke #${hPack.joke!.id}'),
+            _getButtons(isLiked, isSaved, hPack.joke!.id, () {
+              setter(() {
+                isLiked = !isLiked;
+              });
+              BlocProvider.of<JokeBloc>(context).add(LikeJokeEvent(
+                id: hPack.joke!.id,
+              ));
+            }, () {
+              setter(() {
+                isSaved = !isSaved;
+              });
+              BlocProvider.of<JokeBloc>(context).add(SaveJokeToMemoryBookEvent(
+                id: hPack.joke!.id,
+              ));
+            })
+          ],
+        );
+      });
+    } else {
+      //TODO Error
+      return SizedBox();
+    }
   }
 
   Widget _getActionContainer() {
-    return BlocBuilder<ActionBloc, ActionState>(builder: (context, state) {
-      if (state is LoadedActionState) {
-        bool isLiked = state.action.liked;
-        bool isSaved = state.action.saved;
-        return StatefulBuilder(builder: (context, setter) {
-          return Stack(
-            children: [
-              Center(
-                child: Text(
-                  state.action.actionText,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
-                ),
+    if (hPack.action != null) {
+      bool isLiked = hPack.action!.liked;
+      bool isSaved = hPack.action!.saved;
+      return StatefulBuilder(builder: (context, setter) {
+        return Stack(
+          children: [
+            Center(
+              child: Text(
+                hPack.action!.actionText,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
               ),
-              _getBottomText('Daily Affirmation #' + state.action.id),
-              _getButtons(isLiked, isSaved, state.action.id, () {
-                setter(() {
-                  isLiked = !isLiked;
-                });
-                BlocProvider.of<ActionBloc>(context).add(LikeActionEvent(
-                  id: state.action.id,
-                ));
-              }, () {
-                setter(() {
-                  isSaved = !isSaved;
-                });
-                BlocProvider.of<ActionBloc>(context)
-                    .add(SaveActionToMemoryBookEvent(
-                  id: state.action.id,
-                ));
-              })
-            ],
-          );
-        });
-      }
-      //Todo
-      return Container();
-    });
+            ),
+            _getBottomText('Daily Affirmation #${hPack.action!.id}'),
+            _getButtons(isLiked, isSaved, hPack.action!.id, () {
+              setter(() {
+                isLiked = !isLiked;
+              });
+              BlocProvider.of<ActionBloc>(context).add(LikeActionEvent(
+                id: hPack.action!.id,
+              ));
+            }, () {
+              setter(() {
+                isSaved = !isSaved;
+              });
+              BlocProvider.of<ActionBloc>(context)
+                  .add(SaveActionToMemoryBookEvent(
+                id: hPack.action!.id,
+              ));
+            })
+          ],
+        );
+      });
+    } else {
+      //TODO error
+      return SizedBox();
+    }
   }
 
   Widget _getButtons(bool isLiked, bool isSaved, String id, Function onTapLike,

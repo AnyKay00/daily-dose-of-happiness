@@ -17,7 +17,7 @@ class MotivationRepository {
     String _baseUrl = baseUrl + '/rest/v1/motivation/';
     try {
       String cache = await _cacheManager.read(motivationK);
-      if (cache == null || cache.isEmpty) {
+      if (cache.isEmpty) {
         Response response =
             await get(Uri.parse(_baseUrl), headers: buildHttpsHeader());
         if (response.statusCode == 200) {
@@ -26,8 +26,7 @@ class MotivationRepository {
           _cacheManager.write(motivationK, body.first);
           return motivation;
         } else {
-          //TODO Errorclass zurückgeben?
-          throw Exception('Failed to get motivation from zenquote');
+          throw Exception('Failed to get motivation from api');
         }
       } else {
         MotivationModel motivation =

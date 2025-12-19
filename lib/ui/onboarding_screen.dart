@@ -67,7 +67,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           curve: Curves.easeOut,
                         );
                       },
-                      child: const Text('Überspringen'),
+                      child: Text(
+                        'Überspringen',
+                        style:
+                            AppTextStyle.getdynamicTextStyle(Colors.black, 16),
+                      ),
                     ),
                   ],
                 ),
@@ -96,9 +100,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           'Alles ist erlaubt. Es gibt kein richtig oder falsch.',
                     ),
                     _OnboardingPage(
-                      title: 'Deine Daily Dose entsteht aus deinem Gefühl',
+                      title: 'Dein Happiness-Paket entsteht auf Basis deines Gefühls',
                       body:
-                          'Basierend auf deinem aktuellen Gemütszustand stell dir Pina deine persönliches Happiness Paket zusammen.\n'
+                          'Basierend auf deinem aktuellen Gemütszustand stellt dir Pina dein persönliches Happiness-Paket zusammen.\n'
                           'Es ist an das angepasst, was du gerade brauchst.',
                       pinaText: 'Ganz auf dich eingestellt!',
                     ),
@@ -115,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Bottom controls
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 80),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -125,14 +129,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     const SizedBox(height: 14),
                     SizedBox(
-                      width: double.infinity,
+                      width: MediaQuery.sizeOf(context).width > 800
+                          ? MediaQuery.sizeOf(context).width / 1.5
+                          : double.infinity,
                       height: 52,
                       child: ElevatedButton(
                         onPressed: _next,
                         style: ButtonStyle(
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.white)),
-                        child: Text(isLast ? 'Lass uns starten' : 'Weiter'),
+                        child: Text(
+                          isLast ? 'Lass uns starten' : 'Weiter',
+                          style: AppTextStyle.getdynamicTextStyle(
+                              Colors.black, 20),
+                        ),
                       ),
                     ),
                   ],
