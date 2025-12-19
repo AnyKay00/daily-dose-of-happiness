@@ -30,6 +30,8 @@ class DailyHomeScreen extends StatefulWidget {
 class _DailyHomeScreenState extends State<DailyHomeScreen> {
   late APICacheManager cacheManager;
 
+  int _pageIndex = 0;
+
   @override
   void didChangeDependencies() {
     cacheManager = Provider.of<APICacheManager>(context, listen: false);
@@ -60,20 +62,31 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   }
 
   Widget _buildReelPageView(BuildContext context, List<FeelingModel> feelings) {
-    return PageView.builder(
-      scrollDirection: Axis.vertical,
-      // itemCount ist Datenlänge + 1 (für den Intro Screen)
-      itemCount: feelings.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          // Index 0 ist IMMER der Intro Screen
-          return _buildIntroPage();
-        } else {
-          // Alle weiteren Indices sind Daten (index - 1)
-          final feeling = feelings[index - 1];
-          return _buildFeelingPage(context, feeling, index);
-        }
-      },
+    return Stack(
+      children: [
+        PageView.builder(
+          scrollDirection: Axis.vertical,
+          onPageChanged: (index) => setState(() => _pageIndex = index),
+          // itemCount ist Datenlänge + 1 (für den Intro Screen)
+          itemCount: feelings.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Index 0 ist IMMER der Intro Screen
+              return _buildIntroPage();
+            } else {
+              // Alle weiteren Indices sind Daten (index - 1)
+              final feeling = feelings[index - 1];
+              return _buildFeelingPage(context, feeling, index);
+            }
+          },
+        ),
+        if (_pageIndex != 0)
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child:
+                _DotsIndicator(count: feelings.length, index: _pageIndex - 1),
+          ),
+      ],
     );
   }
 
@@ -203,6 +216,36 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DotsIndicator extends StatelessWidget {
+  final int count;
+  final int index;
+
+  const _DotsIndicator({
+    required this.count,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(count, (i) {
+        final isActive = i == index;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          height: isActive ? 18 : 8,
+          width: 8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(99),
+            color: isActive ? AppColors.secondaryColor : Colors.white,
+          ),
+        );
+      }),
     );
   }
 }

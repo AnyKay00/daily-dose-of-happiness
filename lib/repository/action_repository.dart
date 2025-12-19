@@ -26,7 +26,7 @@ class ActionRepository {
           _cacheManager.write(actionK, body.first.toString());
           return motivation;
         } else {
-          //TODO Errorclass zurückgeben?
+          
           throw Exception('Failed to get Action from zenquote');
         }
       } else {
@@ -36,7 +36,7 @@ class ActionRepository {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      return null; // better return Error class
+      return null; 
     }
   }
 

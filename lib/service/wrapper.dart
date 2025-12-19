@@ -18,25 +18,16 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  bool _canSelectEmotion(DayTime? lastDayTime, DayTime currentDayTime) {
-    if (lastDayTime == null) {
-      return true; // Noch keine Emotion heute gewählt
-    }
-    // Wenn die letzte Wahl in einer anderen Tageszeit war, darf gewählt werden
-    if (currentDayTime == DayTime.morning && lastDayTime != DayTime.morning) {
-      return true;
-    }
-    if (currentDayTime == DayTime.evening && lastDayTime != DayTime.evening) {
-      return true;
-    }
+  late APICacheManager cacheManager;
 
-    return false; // Bereits in dieser Tageszeit gewählt
+  @override
+  void didChangeDependencies() {
+    cacheManager = Provider.of<APICacheManager>(context, listen: true);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final cacheManager = Provider.of<APICacheManager>(context, listen: true);
-
     return FutureBuilder<String>(
       future: cacheManager.read(feelingSelectedCountK),
       builder: (context, snapshot) {
@@ -75,6 +66,7 @@ class _WrapperState extends State<Wrapper> {
           // Neuer Tag -> Reset und aktuelle Tageszeit ermitteln
           if (savedDay.isBefore(todayDay)) {
             DayTime currentDayTime = getCurrentDayTimeEnum();
+            cacheManager.deleteHapinessPack();
             return DailyHomeScreen(
               selectedFeelingCount: 0,
               dayTime: currentDayTime,
@@ -89,6 +81,7 @@ class _WrapperState extends State<Wrapper> {
 
             // Prüfe ob User in dieser Tageszeit wählen darf
             if (_canSelectEmotion(savedDayTime, currentDayTime)) {
+              cacheManager.deleteHapinessPack();
               return DailyHomeScreen(
                 selectedFeelingCount: selectedFeelingCount,
                 dayTime: currentDayTime,
@@ -110,6 +103,21 @@ class _WrapperState extends State<Wrapper> {
       },
     );
   }
+}
+
+bool _canSelectEmotion(DayTime? lastDayTime, DayTime currentDayTime) {
+  if (lastDayTime == null) {
+    return true; // Noch keine Emotion heute gewählt
+  }
+  // Wenn die letzte Wahl in einer anderen Tageszeit war, darf gewählt werden
+  if (currentDayTime == DayTime.morning && lastDayTime != DayTime.morning) {
+    return true;
+  }
+  if (currentDayTime == DayTime.evening && lastDayTime != DayTime.evening) {
+    return true;
+  }
+
+  return false; // Bereits in dieser Tageszeit gewählt
 }
 
 DayTime getCurrentDayTimeEnum() {
