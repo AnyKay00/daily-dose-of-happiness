@@ -16,16 +16,17 @@ class FeelingModel {
     return FeelingModel(
       id: json['id']?.toString() ?? '',
       //todo from ennum
-      feelingName: FeelingEnum.happy, //json['feeling']?.toString() ?? '',
+      feelingName: FeelingEnum.values
+          .firstWhere((e) => (json['description']?.toString() ?? '') == e.name),
       feelingColor: json['color'] != null
-          ? buildColor(json['color']?.toString() ?? '#72ACD4')
+          ? buildColor(json['color']?.toString() ?? '72ACD4')
           : const Color(0xFF72ACD4),
     );
   }
 }
 
 Color buildColor(String colorcode) {
-  if (colorcode.isEmpty) colorcode = '#72ACD4';
-  String hexA = '0xFF${colorcode.substring(1)}';
+  if (colorcode.isEmpty) colorcode = '72ACD4';
+  String hexA = '0xFF$colorcode';
   return Color(int.parse(hexA));
 }

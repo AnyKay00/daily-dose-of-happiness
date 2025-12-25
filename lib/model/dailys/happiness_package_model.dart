@@ -18,8 +18,9 @@ class HappinessPackModel {
   });
 
   factory HappinessPackModel.fromJson(Map<String, dynamic> json) {
+    print(json);
     return HappinessPackModel(
-      feelingId: json['feeling_id'] ?? '',
+      feelingId: json['feeling_id']?.toString() ?? '',
       generatedAt: DateTime.parse(json['generated_at'] ?? ''),
       joke: json['joke'] != null ? JokeModel.fromJson(json['joke']) : null,
       motivation: json['motivation'] != null

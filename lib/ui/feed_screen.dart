@@ -181,14 +181,15 @@ class _FeedScreenState extends State<FeedScreen> {
                     textAlign: TextAlign.center,
                     style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
                   ),
-                  if (hPack.motivation!.authorName.isNotEmpty)
+                  if (hPack.motivation!.authorName.isNotEmpty ||
+                      hPack.motivation!.authorName != 'null')
                     Text('- ${hPack.motivation!.authorName}',
                         style: AppTextStyle.getdynamicTextStyle(
                             Colors.black45, 20)),
                 ],
               ),
             ),
-            _getBottomText('Daily Motivation #${hPack.motivation!.id}'),
+            _getBottomText('Daily Motivation #${hPack.motivation!.shortId}'),
             _getButtons(isLiked, isSaved, hPack.motivation!.id, () {
               setter(() {
                 isLiked = !isLiked;
@@ -235,12 +236,12 @@ class _FeedScreenState extends State<FeedScreen> {
           children: [
             Center(
               child: Text(
-                hPack.joke!.joke,
+                hPack.joke!.jokeText,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
               ),
             ),
-            _getBottomText('Daily Joke #${hPack.joke!.id}'),
+            _getBottomText('Daily Joke #${hPack.joke!.shortId}'),
             _getButtons(isLiked, isSaved, hPack.joke!.id, () {
               setter(() {
                 isLiked = !isLiked;
@@ -279,7 +280,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 style: AppTextStyle.getdynamicTextStyle(Colors.black87, 26),
               ),
             ),
-            _getBottomText('Daily Affirmation #${hPack.action!.id}'),
+            _getBottomText('Daily Affirmation #${hPack.action!.shortId}'),
             _getButtons(isLiked, isSaved, hPack.action!.id, () {
               setter(() {
                 isLiked = !isLiked;
@@ -309,7 +310,7 @@ class _FeedScreenState extends State<FeedScreen> {
       Function onTapSave) {
     return Positioned(
       key: UniqueKey(),
-      right: 16,
+      right: 0,
       bottom: 100,
       child: Column(
         mainAxisSize: MainAxisSize.min,

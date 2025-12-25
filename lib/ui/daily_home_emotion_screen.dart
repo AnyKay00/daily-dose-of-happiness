@@ -50,7 +50,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is LoadedFeelingListState) {
             return _buildReelPageView(context, state.feelings);
-          } else if (state is LoadFeelingsEvent) {
+          } else if (state is FailedLoadFeelingListState) {
             return const Center(
                 child:
                     Text("Es ist ein Fehler aufgetreten, verusche er erneut."));

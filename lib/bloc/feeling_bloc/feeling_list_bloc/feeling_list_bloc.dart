@@ -13,7 +13,8 @@ class FeelingListBloc extends Bloc<FeelingListEvent, FeelingListState> {
       //set state to loading
       emit(LoadingFeelingListState());
       try {
-        final response = <FeelingModel>[
+        final response = await repository
+            .getAllFeelings(); /* <FeelingModel>[
           FeelingModel(
               id: 'id',
               feelingName: FeelingEnum.happy,
@@ -42,8 +43,8 @@ class FeelingListBloc extends Bloc<FeelingListEvent, FeelingListState> {
               id: 'id',
               feelingName: FeelingEnum.motivated,
               feelingColor: Color(0xFFFFB882)),
-        ];
-        // await repository.loadFeelings();
+        ]; */
+
         //set state to success
         if (response != null) {
           emit((LoadedFeelingListState(feelings: response)));
