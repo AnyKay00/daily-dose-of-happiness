@@ -100,7 +100,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           'Alles ist erlaubt. Es gibt kein richtig oder falsch.',
                     ),
                     _OnboardingPage(
-                      title: 'Dein Happiness-Paket entsteht auf Basis deines Gefühls',
+                      title:
+                          'Dein Happiness-Paket entsteht auf Basis deines Gefühls',
                       body:
                           'Basierend auf deinem aktuellen Gemütszustand stellt dir Pina dein persönliches Happiness-Paket zusammen.\n'
                           'Es ist an das angepasst, was du gerade brauchst.',
@@ -119,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Bottom controls
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 80),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 50),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

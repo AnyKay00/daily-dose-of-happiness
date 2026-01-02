@@ -3,6 +3,7 @@ import 'package:daily_dose_of_happiness/model/dailys/happiness_package_model.dar
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FeelingRepository {
@@ -12,7 +13,14 @@ class FeelingRepository {
   }
   Future<List<FeelingModel>> getAllFeelings() async {
     try {
-      final response = await Supabase.instance.client.from('feeling').select();
+      /* final session = Supabase.instance.client.auth.currentSession;
+      print("session: ${session != null}");
+      print("user: ${Supabase.instance.client.auth.currentUser?.id}"); */
+      final response = await Supabase.instance.client
+          .from('feeling')
+          .select()
+          .limit(9)
+          .timeout(15.seconds);
 
       return (response as List<dynamic>)
           .map((json) => FeelingModel.fromJson(json))

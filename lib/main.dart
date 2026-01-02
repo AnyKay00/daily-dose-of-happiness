@@ -26,6 +26,7 @@ void main() async {
     url: baseUrl,
     anonKey: apiKey,
   );
+
   /*final AuthService authService = await AuthService.init();
 
   // Prüfen ob Guest bereits existiert

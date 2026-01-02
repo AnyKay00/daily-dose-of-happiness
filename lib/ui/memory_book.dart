@@ -17,7 +17,7 @@ class MemoryBookScreen extends StatefulWidget {
 
 class _MemoryBookScreenState extends State<MemoryBookScreen> {
   bool _activePush = false;
-
+  double width = 0;
   String version = '0.1.0';
   String buildNumber = '1.0';
 
@@ -28,6 +28,12 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
+  }
+
+  @override
+  void didChangeDependencies() {
+    width = MediaQuery.sizeOf(context).width;
+    super.didChangeDependencies();
   }
 
   @override
@@ -52,7 +58,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //header
-          Row(
+          Stack(
             children: [
               IconButton(
                   onPressed: () {
@@ -62,10 +68,11 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
                     Icons.arrow_back_ios,
                     color: Colors.black,
                   )),
-              Spacer(),
-              Text('Memory Book',
-                  style: AppTextStyle.getdynamicTextStyle(Colors.black, 24)),
-              Spacer(flex: 2)
+              Align(
+                alignment: Alignment.center,
+                child: Text('Memory Book',
+                    style: AppTextStyle.getdynamicTextStyle(Colors.black, 24)),
+              ),
             ],
           ),
           SizedBox(height: 20),
@@ -246,6 +253,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
 
               return _DayFeelingItem(
                 date: day,
+                width: width > 900 ? 80 : width / 7,
                 feeling: feelingForDay, // kann null sein → Platzhalter
                 isToday: isToday,
               );
@@ -275,10 +283,12 @@ class _DayFeelingItem extends StatelessWidget {
   final DateTime date;
   final UserFeelingModel? feeling;
   final bool isToday;
+  final double width;
 
   const _DayFeelingItem({
     Key? key,
     required this.date,
+    required this.width,
     required this.feeling,
     required this.isToday,
   }) : super(key: key);
@@ -291,8 +301,8 @@ class _DayFeelingItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          width: MediaQuery.sizeOf(context).width / 7,
-          height: MediaQuery.sizeOf(context).width / 7,
+          width: width,
+          height: width,
           child: (feeling != null)
               ? Image.asset(
                   'assets/feelings/pina_${feeling!.feeling.feelingName.name}.png',

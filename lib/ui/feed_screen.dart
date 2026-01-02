@@ -26,7 +26,13 @@ class _FeedScreenState extends State<FeedScreen> {
   bool _showIntro = true;
   double _introOpacity = 1.0;
   int _pageIndex = 0;
+  double width = 0;
   late HappinessPackModel hPack;
+  @override
+  void didChangeDependencies() {
+    width = MediaQuery.sizeOf(context).width;
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -101,7 +107,8 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
         Align(alignment: Alignment.topRight, child: _getHeader()),
 
-        _DotsIndicator(count: 3, index: _pageIndex),
+        _DotsIndicator(
+            expanded: width > 900 ? true : false, count: 3, index: _pageIndex),
         // Intro-Overlay mit Pina + Sprechblase
         if (_showIntro)
           Positioned(
@@ -406,10 +413,12 @@ class _FeedScreenState extends State<FeedScreen> {
 class _DotsIndicator extends StatelessWidget {
   final int count;
   final int index;
+  final bool expanded;
 
   const _DotsIndicator({
     required this.count,
     required this.index,
+    required this.expanded,
   });
 
   @override
@@ -421,8 +430,12 @@ class _DotsIndicator extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          height: isActive ? 18 : 8,
-          width: 8,
+          height: expanded && isActive
+              ? 28
+              : !expanded && isActive
+                  ? 20
+                  : 10,
+          width: expanded ? 15 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
             color: isActive ? AppColors.secondaryColor : Colors.white,

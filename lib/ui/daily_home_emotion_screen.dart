@@ -30,12 +30,13 @@ class DailyHomeScreen extends StatefulWidget {
 
 class _DailyHomeScreenState extends State<DailyHomeScreen> {
   late APICacheManager cacheManager;
-
+  double width = 0;
   int _pageIndex = 0;
 
   @override
   void didChangeDependencies() {
     cacheManager = Provider.of<APICacheManager>(context, listen: false);
+    width = MediaQuery.sizeOf(context).width;
     super.didChangeDependencies();
   }
 
@@ -138,7 +139,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
       BuildContext context, FeelingModel feeling, int index) {
     // Generiere eine Farbe basierend auf dem Index
     final Color backgroundColor = feeling.feelingColor;
-
+    final widthPina = width > 900 ? width / 4.5 : width / 2.5;
     return Container(
       color: backgroundColor,
       child: SafeArea(
@@ -151,7 +152,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 children: [
                   Image.asset(
                     'assets/feelings/pina_${feeling.feelingName.name}.png',
-                    width: MediaQuery.sizeOf(context).width / 2.5,
+                    width: widthPina,
                   ),
                   const SizedBox(height: 30),
                   Center(
@@ -169,15 +170,12 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             ),
 
             // Select Button am Boden
-            Positioned(
-              bottom: 40,
-              left: 20,
-              right: 20,
-              child: SizedBox(
-                height: 60,
-                width: MediaQuery.sizeOf(context).width > 700
-                    ? MediaQuery.sizeOf(context).width / 1.5
-                    : double.infinity,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+                height: 65,
+                width: width > 700 ? width / 1.5 : double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
