@@ -100,7 +100,7 @@ class _FeedScreenState extends State<FeedScreen> {
           itemCount: 3, //dynamic?
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 10),
               child: _getDailys(index),
             );
           },
@@ -229,7 +229,7 @@ class _FeedScreenState extends State<FeedScreen> {
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Text(text,
-            style: AppTextStyle.getdynamicTextStyle(Colors.black87, 20)),
+            style: AppTextStyle.getdynamicTextStyle(Colors.black87, 16)),
       ),
     );
   }

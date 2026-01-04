@@ -1,8 +1,7 @@
-import 'dart:convert';
-import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
-import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+/*
 class AuthService {
   AuthService(this._cache) {
     currentUserId = null;
@@ -72,5 +71,102 @@ class AuthService {
   Future<void> writeGuestId(String id) async {
     currentUserId = id;
     _cache.write(_guestIdKey, id);
+  }
+}
+ */
+
+class AuthService extends ChangeNotifier {
+  final SupabaseClient supabase;
+
+  AuthService({SupabaseClient? client})
+      : supabase = client ?? Supabase.instance.client;
+
+  String? _currentUserId;
+  String? get currentUserId => _currentUserId;
+
+  StreamSubscription<AuthState>? _authSub;
+
+  /// Muss einmal beim App-Start aufgerufen werden.
+  Future<void> init() async {
+    // 1) Setze initial aus ggf. bereits persistierter Session
+    _currentUserId = supabase.auth.currentUser?.id;
+
+    // 2) Subscribe auf Auth-Änderungen (Token refresh, SignOut etc.)
+    _authSub?.cancel();
+    _authSub = supabase.auth.onAuthStateChange.listen((data) {
+      _currentUserId = data.session?.user.id;
+      notifyListeners();
+    });
+    print('current user id :');
+    print(_currentUserId);
+    // 3) Wenn noch kein User existiert, erstelle Guest/Anonymous User
+    if (_currentUserId == null) {
+      await _createGuestUser();
+    } else {
+      // Optional: user_profile sicherstellen
+      await _ensureUserProfile(_currentUserId!, isGuest: true);
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> _createGuestUser() async {
+    final res = await supabase.auth.signInAnonymously();
+    print('responsefrom anon sign in: $res');
+
+    final user = res.user;
+    if (user == null) {
+      throw Exception('Anonymous sign-in failed: user is null');
+    }
+
+    _currentUserId = user.id;
+
+    // Optional (wenn kein Trigger existiert): user_profile upsert
+    await _ensureUserProfile(user.id, isGuest: true);
+  }
+
+  Future<void> _ensureUserProfile(String userId,
+      {required bool isGuest}) async {
+    // Wenn du DB-Trigger nutzt, kann dieser Block entfallen.
+    await supabase.from('user_profile').upsert(
+      {
+        'user_id': userId,
+        'is_guest': isGuest,
+      },
+      onConflict: 'user_id',
+    );
+  }
+
+  /// Optional: später Account upgraden (Email/Passwort)
+  Future<void> upgradeToEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    // Je nach gewünschtem Flow: signUp oder updateUser.
+    // Für anonyme User kann man häufig ein "linking" via updateUser machen.
+    final res = await supabase.auth.updateUser(
+      UserAttributes(email: email, password: password),
+    );
+
+    if (res.user == null) {
+      throw Exception('Upgrade failed: user is null');
+    }
+
+    _currentUserId = res.user!.id;
+    await _ensureUserProfile(_currentUserId!, isGuest: false);
+
+    notifyListeners();
+  }
+
+  Future<void> signOut() async {
+    await supabase.auth.signOut();
+    _currentUserId = null;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _authSub?.cancel();
+    super.dispose();
   }
 }

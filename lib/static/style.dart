@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors();
 
-  static const Color primaryColor = Color(0xFFF7D774);
+  //static const Color primaryColor = Color(0xFFF7D774);
+  static const Color primaryColor = Color(0xFF86BBCF);
 
-  static const Color secondaryColor = Color(0xFF4EC5C1);
+  //static const Color secondaryColor = Color(0xFF4EC5C1);
+  static const Color secondaryColor = Color(0xFFF2D882);
 
   static const Color backgroundColor = Color(0xFFFAF9F7);
+
+  static const Color textColor = Color(0xFF0E1B1C);
 
   static const Color ligthTextColor = Color.fromARGB(255, 160, 160, 160);
 
@@ -34,18 +38,22 @@ class AppGradients {
       begin: Alignment.topRight,
       end: Alignment.bottomCenter,
       colors: [
-        /*   AppColors.primaryColorGradientStart,
-        // AppColors.primaryColorGradientMiddle,
-        AppColors.primaryColorGradientEnd */
         AppColors.primaryColor,
         AppColors.secondaryColor,
       ]);
   static LinearGradient backgroundGradient = const LinearGradient(
-      begin: Alignment.topCenter,
+      begin: Alignment.topRight,
       end: Alignment.bottomCenter,
+      stops: [
+        0.3,
+        0.7,
+        0.99999
+      ],
       colors: [
-        AppColors.secondaryColor,
         AppColors.primaryColor,
+        //   Color(0xFF7CAEC1),
+        Color(0xFFBFCAA6),
+        AppColors.secondaryColor,
       ]);
   static LinearGradient pinaGradient = const LinearGradient(
       begin: Alignment.topLeft,
@@ -57,5 +65,16 @@ class AppGradients {
       colors: [
         Colors.white,
         AppColors.pinaBlueLight,
+      ]);
+  static LinearGradient buttonGradient = const LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomRight,
+      stops: [
+        0.01,
+        0.992,
+      ],
+      colors: [
+        AppColors.secondaryColor,
+        Color.fromARGB(255, 202, 201, 107)
       ]);
 }

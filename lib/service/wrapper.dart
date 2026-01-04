@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:daily_dose_of_happiness/service/auth_service.dart';
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
@@ -31,6 +32,12 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<String>(
       future: cacheManager.read(feelingSelectedCountK),
       builder: (context, snapshot) {
+        //test
+
+        final userId = context.read<AuthService>().currentUserId;
+        print('test user id #####################');
+        print(userId);
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox();
         }

@@ -7,7 +7,7 @@ abstract class FeelingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SendDailyFeelingsEvent extends FeelingEvent {
+class SendDailyFeelingEvent extends FeelingEvent {
   final String feelingId;
-  const SendDailyFeelingsEvent({required this.feelingId});
+  const SendDailyFeelingEvent({required this.feelingId});
 }

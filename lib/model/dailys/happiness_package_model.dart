@@ -18,7 +18,6 @@ class HappinessPackModel {
   });
 
   factory HappinessPackModel.fromJson(Map<String, dynamic> json) {
-    print(json);
     return HappinessPackModel(
       feelingId: json['feeling_id']?.toString() ?? '',
       generatedAt: DateTime.parse(json['generated_at'] ?? ''),

@@ -107,7 +107,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           children: [
             Text(
               "Daily Check-in",
-              style: AppTextStyle.getdynamicTextStyle(Colors.black87, 20),
+              style: AppTextStyle.getdynamicTextStyle(AppColors.textColor, 20),
             ),
             Spacer(),
             Text(
@@ -115,7 +115,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                   ? "Wie geht es dir jetzt gerade?"
                   : "Wie geht es dir heute?",
               textAlign: TextAlign.center,
-              style: AppTextStyle.getdynamicTextStyle(Colors.black87, 36),
+              style: AppTextStyle.getdynamicTextStyle(AppColors.textColor, 36),
             ),
             Spacer(),
             Text(
@@ -141,6 +141,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
     final Color backgroundColor = feeling.feelingColor;
     final widthPina = width > 900 ? width / 4.5 : width / 2.5;
     return Container(
+      key: UniqueKey(),
       color: backgroundColor,
       child: SafeArea(
         child: Stack(
@@ -172,46 +173,55 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
             // Select Button am Boden
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-                height: 65,
-                width: width > 700 ? width / 1.5 : double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
-                    shadowColor: Colors.black54,
-                    elevation: 15,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+              child: GestureDetector(
+                onTap: () {
+                  print(feeling.feelingName.name);
+                  print(feeling.id);
+                  //increment chosed feeling to cache
+                  int newCounter = widget.selectedFeelingCount + 1;
+                  Map<String, String> json = {
+                    'date': DateTime.now().toIso8601String(),
+                    'counter': newCounter.toString(),
+                    'day_time': getCurrentDayTimeEnum().name
+                  };
+                  cacheManager.write(feelingSelectedCountK, jsonEncode(json));
+                  //save daily feeling
+                  BlocProvider.of<FeelingBloc>(context).add(
+                    SendDailyFeelingEvent(feelingId: feeling.id),
+                  );
+                  // oldDailysBlocHandler.triggerDalysBlocEvents(context);
+                  //get happinesspack
+                  BlocProvider.of<HappinessPackBloc>(context).add(
+                      GetHappinessPackOfFeelingEvent(feelingId: feeling.id));
+                  //navigate to feed
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FeedScreen()),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+                  height: 65,
+                  width: width > 700 ? width / 1.5 : double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: AppGradients.buttonGradient,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    //increment chosed feeling to cache
-                    int newCounter = widget.selectedFeelingCount + 1;
-                    Map<String, String> json = {
-                      'date': DateTime.now().toIso8601String(),
-                      'counter': newCounter.toString(),
-                      'day_time': getCurrentDayTimeEnum().name
-                    };
-                    cacheManager.write(feelingSelectedCountK, jsonEncode(json));
-                    //save daily feeling
-                    BlocProvider.of<FeelingBloc>(context).add(
-                      SendDailyFeelingsEvent(feelingId: feeling.id),
-                    );
-                    // oldDailysBlocHandler.triggerDalysBlocEvents(context);
-                    //get happinesspack
-                    BlocProvider.of<HappinessPackBloc>(context).add(
-                        GetHappinessPackOfFeelingEvent(feelingId: feeling.id));
-                    //navigate to feed
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FeedScreen()),
-                    );
-                  },
-                  child: const Text(
-                    "Auswählen",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  child: Center(
+                    child: const Text(
+                      "Auswählen",
+                      style: TextStyle(
+                          color: AppColors.textColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),

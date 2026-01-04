@@ -66,23 +66,47 @@ class FeelingRepository {
     }
   }
 
-  Future sendDailyFeeling(String feelingId) async {
-    /*  String _baseUrl = '${baseUrl}feelings/set-daily/$feelingId/';
-
+  Future<String?> sendDailyFeeling(String feelingId) async {
+    print('feeling id');
+    print(feelingId);
     try {
-      Response response = await put(Uri.parse(_baseUrl),
-          headers: buildHttpsHeader());
-      if (response.statusCode == 200) {
-        Iterable body = jsonDecode(utf8.decode(response.bodyBytes));
-        List<FeelingModel> feelings =
-            body.map((obj) => FeelingModel.fromJson(obj)).toList();
-        return feelings;
-      } else {
-        throw Exception('Failed to get feelings from server');
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user == null) {
+        throw Exception(
+            'No authenticated user. Ensure AuthService.init() ran.');
       }
-    } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return null;
-    } */
+      final profile = await Supabase.instance.client
+          .from('user_profile')
+          .select('user_id')
+          .eq('user_id', user.id)
+          .single();
+      final String userProfileId = profile['user_id'] as String;
+      // Update not working yet!todo
+      //2) Upsert: pro Tag genau ein Eintrag
+      // Voraussetzung für sauberen Upsert:
+      // - Spalte feeling_date (date) existiert
+      // - Unique Index auf (user_profile_id, feeling_date) existiert
+      print('user profiel id');
+      print(userProfileId);
+      await Supabase.instance.client.from('user_feelings').upsert(
+        {
+          'user_profile_id': userProfileId,
+          'feeling_id': feelingId,
+          'created_at':
+              DateTime.now().toUtc().toIso8601String().substring(0, 10),
+        },
+        onConflict: 'user_profile_id,created_at',
+      );
+      return 'success';
+    } on PostgrestException catch (e) {
+      print('PostgrestException: ${e.message}');
+      print('Details: ${e.details}');
+      print('Hint: ${e.hint}');
+      print('Code: ${e.code}');
+      rethrow;
+    } catch (e) {
+      print('Unknown error: $e');
+      rethrow;
+    }
   }
 }

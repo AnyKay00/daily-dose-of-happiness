@@ -16,6 +16,7 @@ import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,18 +27,10 @@ void main() async {
     url: baseUrl,
     anonKey: apiKey,
   );
-
-  /*final AuthService authService = await AuthService.init();
-
-  // Prüfen ob Guest bereits existiert
-  final existing = await authService.readGuestId();
-
-  if (existing.isEmpty) {
-    final newId = await authService.createGuestUser();
-    print("Neuer Guest User: $newId");
-  } else {
-    print("Bestehender Guest User: $existing");
-  } */
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(const MyApp());
 }
@@ -45,18 +38,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     APICacheManager cacheManager = APICacheManager();
     final feelingRepo = FeelingRepository(cacheManager);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+
     return MultiProvider(
         providers: [
           Provider<APICacheManager>.value(value: cacheManager),
+          ChangeNotifierProvider<AuthService>(create: (_) => AuthService())
         ],
         builder: (context, widget) {
           return MultiBlocProvider(
@@ -88,9 +78,57 @@ class MyApp extends StatelessWidget {
                     ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
                 useMaterial3: true,
               ),
-              home: Wrapper(),
+              home: AppBootstrapScreen(),
             ),
           );
         });
+  }
+}
+
+class AppBootstrapScreen extends StatefulWidget {
+  const AppBootstrapScreen({super.key});
+
+  @override
+  State<AppBootstrapScreen> createState() => _AppBootstrapScreenState();
+}
+
+class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
+  bool _didInit = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didInit) return;
+    _didInit = true;
+    _bootstrap();
+  }
+
+  Future<void> _bootstrap() async {
+    try {
+      // Wichtig: init() setzt currentUserId aus Session ODER erstellt Guest
+      await context.read<AuthService>().init();
+
+      if (!mounted) return;
+      // Nach erfolgreichem Bootstrap in die App weiter
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const Wrapper()),
+      );
+    } catch (e) {
+      // Minimaler Fehler-Fallback (du kannst das später schöner machen)
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Authentication fehlgeschlagen: $e'),
+          duration: 10.seconds,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+    );
   }
 }

@@ -6,7 +6,7 @@ import 'package:daily_dose_of_happiness/repository/feeling_repository.dart';
 class FeelingBloc extends Bloc<FeelingEvent, FeelingState> {
   FeelingRepository repository;
   FeelingBloc({required this.repository}) : super(InitFeelingState()) {
-    on<SendDailyFeelingsEvent>((event, emit) async {
+    on<SendDailyFeelingEvent>((event, emit) async {
       //set state to loading
       emit(LoadingFeelingState());
       try {
