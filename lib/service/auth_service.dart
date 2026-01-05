@@ -86,7 +86,6 @@ class AuthService extends ChangeNotifier {
 
   StreamSubscription<AuthState>? _authSub;
 
-  /// Muss einmal beim App-Start aufgerufen werden.
   Future<void> init() async {
     // 1) Setze initial aus ggf. bereits persistierter Session
     _currentUserId = supabase.auth.currentUser?.id;

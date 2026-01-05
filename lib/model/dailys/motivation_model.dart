@@ -18,6 +18,6 @@ class MotivationModel {
         id: json['id']?.toString() ?? '',
         shortId: json['short_id']?.toString() ?? '',
         text: json['text']?.toString() ?? '',
-        authorName: json['author']?.toString() ?? 'null');
+        authorName: json['author']?.toString() ?? '');
   }
 }

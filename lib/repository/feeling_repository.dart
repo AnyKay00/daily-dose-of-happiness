@@ -88,15 +88,11 @@ class FeelingRepository {
       // - Unique Index auf (user_profile_id, feeling_date) existiert
       print('user profiel id');
       print(userProfileId);
-      await Supabase.instance.client.from('user_feelings').upsert(
-        {
-          'user_profile_id': userProfileId,
-          'feeling_id': feelingId,
-          'created_at':
-              DateTime.now().toUtc().toIso8601String().substring(0, 10),
-        },
-        onConflict: 'user_profile_id,created_at',
-      );
+      await Supabase.instance.client.from('user_feelings').insert({
+        'user_profile_id': userProfileId,
+        'feeling_id': feelingId,
+      });
+
       return 'success';
     } on PostgrestException catch (e) {
       print('PostgrestException: ${e.message}');

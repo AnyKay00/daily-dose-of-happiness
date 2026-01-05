@@ -124,7 +124,7 @@ bool _canSelectEmotion(DayTime? lastDayTime, DayTime currentDayTime) {
     return true;
   }
 
-  return true; // Bereits in dieser Tageszeit gewählt
+  return false; // Bereits in dieser Tageszeit gewählt
 }
 
 DayTime getCurrentDayTimeEnum() {
