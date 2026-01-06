@@ -10,14 +10,14 @@ class JokeBloc extends Bloc<JokeEvent, JokeState> {
       try {
         repository.saveJokeToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving joke to memory book');
       }
     });
     on<LikeJokeEvent>((event, emit) async {
       try {
         repository.likeJokeToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving joke to memory book');
       }
     });
   }

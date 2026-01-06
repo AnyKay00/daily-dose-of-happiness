@@ -7,8 +7,6 @@ abstract class JokeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadJokeEvent extends JokeEvent {}
-
 class SaveJokeToMemoryBookEvent extends JokeEvent {
   final String id;
   const SaveJokeToMemoryBookEvent({required this.id});

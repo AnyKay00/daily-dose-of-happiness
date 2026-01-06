@@ -158,7 +158,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 ],
               ),
               child: Text(
-                "Ich habe dir dein Happiness Paket zusammengestellt",
+                "Ich habe dir dein heutiges Happiness-Paket zusammengestellt",
                 style: AppTextStyle.getdynamicTextStyle(
                   Colors.black87,
                   18,
@@ -197,7 +197,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
             _getBottomText('Daily Motivation #${hPack.motivation!.shortId}'),
-            _getButtons(isLiked, isSaved, hPack.motivation!.id, () {
+            /*  _getButtons(isLiked, isSaved, hPack.motivation!.id, () {
               setter(() {
                 isLiked = !isLiked;
               });
@@ -212,7 +212,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   .add(SaveMotivationToMemoryBookEvent(
                 id: hPack.motivation!.id,
               ));
-            })
+            }) */
           ],
         );
       });
@@ -249,7 +249,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
             _getBottomText('Daily Joke #${hPack.joke!.shortId}'),
-            _getButtons(isLiked, isSaved, hPack.joke!.id, () {
+            /*  _getButtons(isLiked, isSaved, hPack.joke!.id, () {
               setter(() {
                 isLiked = !isLiked;
               });
@@ -263,7 +263,7 @@ class _FeedScreenState extends State<FeedScreen> {
               BlocProvider.of<JokeBloc>(context).add(SaveJokeToMemoryBookEvent(
                 id: hPack.joke!.id,
               ));
-            })
+            }) */
           ],
         );
       });
@@ -288,7 +288,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
             _getBottomText('Daily Affirmation #${hPack.action!.shortId}'),
-            _getButtons(isLiked, isSaved, hPack.action!.id, () {
+            /* _getButtons(isLiked, isSaved, hPack.action!.id, () {
               setter(() {
                 isLiked = !isLiked;
               });
@@ -303,7 +303,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   .add(SaveActionToMemoryBookEvent(
                 id: hPack.action!.id,
               ));
-            })
+            }) */
           ],
         );
       });
@@ -313,7 +313,7 @@ class _FeedScreenState extends State<FeedScreen> {
     }
   }
 
-  Widget _getButtons(bool isLiked, bool isSaved, String id, Function onTapLike,
+  /*  Widget _getButtons(bool isLiked, bool isSaved, String id, Function onTapLike,
       Function onTapSave) {
     return Positioned(
       key: UniqueKey(),
@@ -345,9 +345,9 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
     );
-  }
+  } */
 
-  Widget _buildActionButton({
+  /* Widget _buildActionButton({
     required String id,
     required IconData icon,
     required Color color,
@@ -378,7 +378,7 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
     );
-  }
+  } */
 
   Widget _getHeader() {
     return Padding(
@@ -438,6 +438,7 @@ class _DotsIndicator extends StatelessWidget {
           width: expanded ? 15 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
+            border: Border.all(width: 0.5, color: Colors.white),
             color: isActive ? AppColors.secondaryColor : Colors.white,
           ),
         );

@@ -7,7 +7,7 @@ abstract class HappinessPackEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetHappinessPackOfFeelingEvent extends HappinessPackEvent {
+class LoadHappinessPackOfFeelingEvent extends HappinessPackEvent {
   final String feelingId;
-  const GetHappinessPackOfFeelingEvent({required this.feelingId});
+  const LoadHappinessPackOfFeelingEvent({required this.feelingId});
 }

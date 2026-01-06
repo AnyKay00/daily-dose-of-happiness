@@ -192,7 +192,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                   // oldDailysBlocHandler.triggerDalysBlocEvents(context);
                   //get happinesspack
                   BlocProvider.of<HappinessPackBloc>(context).add(
-                      GetHappinessPackOfFeelingEvent(feelingId: feeling.id));
+                      LoadHappinessPackOfFeelingEvent(feelingId: feeling.id));
                   //navigate to feed
                   Navigator.pushReplacement(
                     context,
@@ -255,6 +255,7 @@ class _DotsIndicator extends StatelessWidget {
           width: 8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
+            border: Border.all(width: 0.5, color: Colors.white),
             color: isActive ? AppColors.secondaryColor : Colors.white,
           ),
         );

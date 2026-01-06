@@ -8,7 +8,7 @@ class HappinessPackBloc extends Bloc<HappinessPackEvent, HappinessPackState> {
 
   HappinessPackBloc({required this.repository})
       : super(InitHappinessPackState()) {
-    on<GetHappinessPackOfFeelingEvent>((event, emit) async {
+    on<LoadHappinessPackOfFeelingEvent>((event, emit) async {
       //set state to loading
       emit(LoadingHappinessPackState());
       try {

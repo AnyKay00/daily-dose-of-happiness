@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_event.dart';
 import 'package:daily_dose_of_happiness/service/auth_service.dart';
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
@@ -7,6 +9,7 @@ import 'package:daily_dose_of_happiness/ui/daily_home_emotion_screen.dart';
 import 'package:daily_dose_of_happiness/ui/feed_screen.dart';
 import 'package:daily_dose_of_happiness/ui/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 enum DayTime { morning, midday, evening, night, fallback }
@@ -32,12 +35,6 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<String>(
       future: cacheManager.read(feelingSelectedCountK),
       builder: (context, snapshot) {
-        //test
-
-        final userId = context.read<AuthService>().currentUserId;
-        print('test user id #####################');
-        print(userId);
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox();
         }
@@ -95,13 +92,13 @@ class _WrapperState extends State<Wrapper> {
               );
             }
 
-            // Limit für diese Tageszeit erreicht → Feed anzeigen
-            DailysBlocHandler.triggerDalysBlocEvents(context);
+            BlocProvider.of<HappinessPackBloc>(context).add(
+                LoadHappinessPackOfFeelingEvent(feelingId: defaultEmotionId));
             return const FeedScreen();
           }
 
-          // Trigger loading dailys
-          DailysBlocHandler.triggerDalysBlocEvents(context);
+          BlocProvider.of<HappinessPackBloc>(context).add(
+              LoadHappinessPackOfFeelingEvent(feelingId: defaultEmotionId));
           return const FeedScreen();
         }
 
@@ -123,8 +120,7 @@ bool _canSelectEmotion(DayTime? lastDayTime, DayTime currentDayTime) {
   if (currentDayTime == DayTime.evening && lastDayTime != DayTime.evening) {
     return true;
   }
-
-  return false; // Bereits in dieser Tageszeit gewählt
+  return true; // Bereits in dieser Tageszeit gewählt
 }
 
 DayTime getCurrentDayTimeEnum() {

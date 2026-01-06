@@ -7,8 +7,6 @@ abstract class ActionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadActionEvent extends ActionEvent {}
-
 class SaveActionToMemoryBookEvent extends ActionEvent {
   final String id;
   const SaveActionToMemoryBookEvent({required this.id});

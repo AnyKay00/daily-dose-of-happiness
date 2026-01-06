@@ -10,14 +10,14 @@ class MotivationBloc extends Bloc<MotivationEvent, MotivationState> {
       try {
         repository.saveMotivationToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving motivation to memory book');
       }
     });
     on<LikeMotivationEvent>((event, emit) async {
       try {
         repository.likeMotivationToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving motivation to memory book');
       }
     });
   }

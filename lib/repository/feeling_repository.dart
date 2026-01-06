@@ -36,7 +36,7 @@ class FeelingRepository {
     String feelingId,
   ) async {
     try {
-      String cacheString = await _cacheManager.read(actionK);
+      String cacheString = await _cacheManager.read(happinessPackK);
       if (cacheString.isEmpty) {
         final response = await Supabase.instance.client.rpc(
           'build_happiness_package',

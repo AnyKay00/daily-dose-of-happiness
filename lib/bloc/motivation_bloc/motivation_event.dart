@@ -7,7 +7,6 @@ abstract class MotivationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadMotivationEvent extends MotivationEvent {}
 
 class SaveMotivationToMemoryBookEvent extends MotivationEvent {
   final String id;

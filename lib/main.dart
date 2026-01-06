@@ -128,6 +128,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: AppColors.primaryColor,
       body: Center(child: CircularProgressIndicator()),
     );
   }

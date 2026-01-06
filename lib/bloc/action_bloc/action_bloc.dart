@@ -10,14 +10,14 @@ class ActionBloc extends Bloc<ActionEvent, ActionState> {
       try {
         repository.saveActionToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving action to memory book');
       }
     });
     on<LikeActionEvent>((event, emit) async {
       try {
         repository.likeActionToMemoryBook(event.id);
       } catch (_) {
-        // Optional: Du könntest hier einen neuen Zustand emitten, um einen Fehler beim Speichern anzuzeigen.
+        print('Error saving action to memory book');
       }
     });
   }
