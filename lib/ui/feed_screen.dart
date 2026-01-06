@@ -1,16 +1,13 @@
-import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
-import 'package:daily_dose_of_happiness/bloc/action_bloc/action_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_state.dart';
-import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
-import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_event.dart';
-import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_event.dart';
-import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_event.dart';
 import 'package:daily_dose_of_happiness/model/dailys/happiness_package_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/memory_book.dart';
+import 'package:daily_dose_of_happiness/ui/wishes_overview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -386,7 +383,14 @@ class _FeedScreenState extends State<FeedScreen> {
             top: MediaQuery.of(context).viewPadding.top + 20, right: 10),
         child:
             //round button for memory book
-            _buildMemoryBookButton());
+            Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _buildWishboxButton(),
+            SizedBox(width: 15),
+            _buildMemoryBookButton(),
+          ],
+        ));
   }
 
   Widget _buildMemoryBookButton() {
@@ -406,6 +410,27 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           padding: const EdgeInsets.all(15),
           child: Icon(Icons.menu_book_rounded, color: Colors.white)),
+    );
+  }
+
+  Widget _buildWishboxButton() {
+    return GestureDetector(
+      onTap: () {
+        //trigger bloc
+        BlocProvider.of<WishListBloc>(context).add(LoadWishesEvent());
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const WishOverviewScreen()));
+      },
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withAlpha(70),
+            shape: BoxShape.circle,
+          ),
+          padding: const EdgeInsets.all(15),
+          child: Icon(Icons.feed, color: Colors.white)),
     );
   }
 }

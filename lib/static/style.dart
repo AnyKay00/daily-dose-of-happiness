@@ -78,3 +78,13 @@ class AppGradients {
         Color.fromARGB(255, 202, 201, 107)
       ]);
 }
+
+class AppDesignHelper {
+  static String formatDate(DateTime dt) {
+    // Simple + robust. Replace with intl if you already use it.
+    final y = dt.year.toString().padLeft(4, '0');
+    final m = dt.month.toString().padLeft(2, '0');
+    final d = dt.day.toString().padLeft(2, '0');
+    return '$d.$m.$y';
+  }
+}

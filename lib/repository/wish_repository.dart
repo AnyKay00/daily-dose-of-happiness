@@ -8,149 +8,204 @@ class WishRepository {
 
   String _requireUid() {
     final uid = _db.auth.currentUser?.id;
-    if (uid == null) throw Exception('Not authenticated');
+    if (uid == null) {
+      throw Exception('WishRepository: User not authenticated');
+    }
     return uid;
   }
 
+  // ------------------------------------------------------------
+  // Wishes
+  // ------------------------------------------------------------
+
   Future<List<WishModel>> loadWishes() async {
-    // Sortierung: score desc, created_at desc
-    final rows = await _db
-        .from('idea_public_vw')
-        .select('*')
-        .order('score', ascending: false)
-        .order('created_at', ascending: false);
+    try {
+      final rows = await _db
+          .from('idea_public_vw')
+          .select('*')
+          .order('score', ascending: false)
+          .order('created_at', ascending: false);
 
-    final wishes = (rows as List)
-        .map((e) => WishModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+      final wishes = (rows as List)
+          .map((e) => WishModel.fromJson(e as Map<String, dynamic>?))
+          .toList();
 
-    // Optional: myVote für alle in einem Rutsch laden und mergen
-    final wishIds = wishes.map((w) => w.id).toList();
-    final myVotes = await loadMyVotesForWishIds(wishIds);
+      final wishIds =
+          wishes.map((w) => w.id).where((id) => id.isNotEmpty).toList();
+      final myVotes = await loadMyVotesForWishIds(wishIds);
 
-    return wishes.map((w) => w.copyWith(myVote: myVotes[w.id])).toList();
+      return wishes.map((w) => w.copyWith(myVote: myVotes[w.id])).toList();
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.loadWishes failed: $e\n$stacktrace',
+      );
+    }
   }
 
   Future<Map<String, int>> loadMyVotesForWishIds(List<String> wishIds) async {
-    if (wishIds.isEmpty) return {};
-    _requireUid();
+    try {
+      if (wishIds.isEmpty) return {};
+      _requireUid();
 
-    // Policy lässt nur eigene Votes zu -> select ist safe
-    final rows = await _db
-        .from('idea_votes')
-        .select('idea_id,value')
-        .inFilter('idea_id', wishIds);
+      final rows = await _db
+          .from('idea_votes')
+          .select('idea_id,value')
+          .inFilter('idea_id', wishIds);
 
-    final map = <String, int>{};
-    for (final r in (rows as List)) {
-      final m = r as Map<String, dynamic>;
-      map[m['idea_id'] as String] = (m['value'] as num).toInt();
+      final map = <String, int>{};
+      for (final r in (rows as List)) {
+        final m = r as Map<String, dynamic>?;
+        final ideaId = m?['idea_id']?.toString();
+        final value = m?['value'];
+
+        if (ideaId != null && value is num) {
+          map[ideaId] = value.toInt();
+        }
+      }
+      return map;
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.loadMyVotesForWishIds failed: $e\n$stacktrace',
+      );
     }
-    return map;
   }
 
-  Future<WishModel> createWish({required String body}) async {
-    final uid = _requireUid();
+  Future<WishModel> createWish(String body) async {
+    try {
+      final uid = _requireUid();
 
-    final row = await _db
-        .from('ideas')
-        .insert({
-          'body': body,
-          'author_uid': uid,
-        })
-        .select(
-            'id, body, status, score, created_at, updated_at') // Base table select ist revoked -> kann scheitern
-        .maybeSingle();
+      await _db.from('ideas').insert({
+        'body': body,
+        'author_uid': uid,
+      });
 
-    // Da du Select auf ideas revoked hast, ist es sauberer, anschließend über View zu lesen:
-    if (row == null) {
-      // Fallback: neueste eigene Idee über View holen
+      // Immer über View neu laden (Base-Table-Select ist revoked)
       final latest = await _db
           .from('idea_public_vw')
           .select('*')
           .order('created_at', ascending: false)
           .limit(1)
           .single();
-      return WishModel.fromJson(latest);
+
+      return WishModel.fromJson(latest as Map<String, dynamic>?);
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.createWish failed: $e\n$stacktrace',
+      );
     }
-
-    // Wenn du insert-return nutzen willst, müsstest du SELECT auf ideas erlauben,
-    // was wir eigentlich vermeiden möchten.
-    // Daher: standardmäßig immer über View reloaden.
-    final latest = await _db
-        .from('idea_public_vw')
-        .select('*')
-        .order('created_at', ascending: false)
-        .limit(1)
-        .single();
-
-    return WishModel.fromJson(latest);
   }
 
   Future<void> updateOwnWish({
     required String wishId,
     required String body,
   }) async {
-    _requireUid();
-    await _db.from('ideas').update({'body': body}).eq('id', wishId);
+    try {
+      _requireUid();
+      await _db.from('ideas').update({'body': body}).eq('id', wishId);
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.updateOwnWish failed: $e\n$stacktrace',
+      );
+    }
   }
 
-  Future<void> vote({
-    required String wishId,
-    required int value, // +1 oder -1
-  }) async {
-    final uid = _requireUid();
-    if (value != 1 && value != -1) throw ArgumentError('Vote must be 1 or -1');
+  // ------------------------------------------------------------
+  // Voting
+  // ------------------------------------------------------------
 
-    await _db.from('idea_votes').upsert(
-      {
-        'idea_id': wishId,
-        'voter_uid': uid,
-        'value': value,
-      },
-      onConflict: 'idea_id,voter_uid',
-    );
-    // score wird via Trigger neu berechnet
+  Future<void> voteOnWish(
+    String wishId,
+    int value,
+  ) async {
+    try {
+      final uid = _requireUid();
+      if (value != 1 && value != -1) {
+        throw ArgumentError('Vote value must be +1 or -1');
+      }
+
+      await _db.from('idea_votes').upsert(
+        {
+          'idea_id': wishId,
+          'voter_uid': uid,
+          'value': value,
+        },
+        onConflict: 'idea_id,voter_uid',
+      );
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.vote failed: $e\n$stacktrace',
+      );
+    }
   }
 
   Future<void> clearVote({required String wishId}) async {
-    final uid = _requireUid();
-    await _db
-        .from('idea_votes')
-        .delete()
-        .eq('idea_id', wishId)
-        .eq('voter_uid', uid);
+    try {
+      final uid = _requireUid();
+      await _db
+          .from('idea_votes')
+          .delete()
+          .eq('idea_id', wishId)
+          .eq('voter_uid', uid);
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.clearVote failed: $e\n$stacktrace',
+      );
+    }
   }
 
-  Future<List<WishCommentModel>> loadComments(String wishId) async {
-    final rows = await _db
-        .from('idea_comment_public_vw')
-        .select('*')
-        .eq('idea_id', wishId)
-        .order('created_at', ascending: true);
+  // ------------------------------------------------------------
+  // Comments
+  // ------------------------------------------------------------
 
-    return (rows as List)
-        .map((e) => WishCommentModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+  Future<List<WishCommentModel>> loadComments(String wishId) async {
+    try {
+      final rows = await _db
+          .from('idea_comment_public_vw')
+          .select('*')
+          .eq('idea_id', wishId)
+          .order('created_at', ascending: true);
+
+      return (rows as List)
+          .map((e) => WishCommentModel.fromJson(e as Map<String, dynamic>?))
+          .toList();
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.loadComments failed: $e\n$stacktrace',
+      );
+    }
   }
 
   Future<void> addComment({
     required String wishId,
     required String body,
   }) async {
-    final uid = _requireUid();
-    await _db.from('idea_comments').insert({
-      'idea_id': wishId,
-      'commenter_uid': uid,
-      'body': body,
-    });
+    try {
+      final uid = _requireUid();
+      await _db.from('idea_comments').insert({
+        'idea_id': wishId,
+        'commenter_uid': uid,
+        'body': body,
+      });
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.addComment failed: $e\n$stacktrace',
+      );
+    }
   }
 
   Future<void> updateOwnComment({
     required String commentId,
     required String body,
   }) async {
-    _requireUid();
-    await _db.from('idea_comments').update({'body': body}).eq('id', commentId);
+    try {
+      _requireUid();
+      await _db
+          .from('idea_comments')
+          .update({'body': body}).eq('id', commentId);
+    } catch (e, stacktrace) {
+      throw Exception(
+        'WishRepository.updateOwnComment failed: $e\n$stacktrace',
+      );
+    }
   }
 }

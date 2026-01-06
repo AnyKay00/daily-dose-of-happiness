@@ -5,10 +5,13 @@ import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feel
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/joke_bloc/joke_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/motivation_bloc/motivation_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/wish_bloc/wish_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_bloc.dart';
 import 'package:daily_dose_of_happiness/repository/action_repository.dart';
 import 'package:daily_dose_of_happiness/repository/feeling_repository.dart';
 import 'package:daily_dose_of_happiness/repository/joke_repository.dart';
 import 'package:daily_dose_of_happiness/repository/motivation_repository.dart';
+import 'package:daily_dose_of_happiness/repository/wish_repository.dart';
 import 'package:daily_dose_of_happiness/service/auth_service.dart';
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
@@ -42,6 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     APICacheManager cacheManager = APICacheManager();
     final feelingRepo = FeelingRepository(cacheManager);
+    final wishRepo = WishRepository(Supabase.instance.client);
 
     return MultiProvider(
         providers: [
@@ -68,7 +72,11 @@ class MyApp extends StatelessWidget {
                   create: (context) => FeelingBloc(repository: feelingRepo)),
               BlocProvider<HappinessPackBloc>(
                   create: (context) =>
-                      HappinessPackBloc(repository: feelingRepo))
+                      HappinessPackBloc(repository: feelingRepo)),
+              BlocProvider<WishBloc>(
+                  create: (context) => WishBloc(repo: wishRepo)),
+              BlocProvider<WishListBloc>(
+                  create: (context) => WishListBloc(repo: wishRepo))
             ],
             child: MaterialApp(
               title: 'Daily dose of Happiness',

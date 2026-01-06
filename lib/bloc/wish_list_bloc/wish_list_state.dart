@@ -6,6 +6,8 @@ class WishListInitial extends WishListState {}
 
 class WishListLoading extends WishListState {}
 
+class EmptyWishList extends WishListState {}
+
 class WishListLoaded extends WishListState {
   final List<WishModel> wishes;
   WishListLoaded(this.wishes);

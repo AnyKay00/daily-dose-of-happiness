@@ -7,11 +7,16 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
   final WishRepository repo;
 
   WishListBloc({required this.repo}) : super(WishListInitial()) {
-    on<WishListLoadRequested>((event, emit) async {
+    on<LoadWishesEvent>((event, emit) async {
       emit(WishListLoading());
       try {
         final wishes = await repo.loadWishes();
-        emit(WishListLoaded(wishes));
+
+        if (wishes.isEmpty) {
+          emit(EmptyWishList());
+        } else {
+          emit(WishListLoaded(wishes));
+        }
       } catch (e) {
         emit(WishListError(e.toString()));
       }

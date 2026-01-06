@@ -10,7 +10,7 @@ class WishBloc extends Bloc<WishEvent, WishState> {
     on<WishCreateRequested>((event, emit) async {
       emit(WishActionInProgress());
       try {
-        await repo.createWish(body: event.body);
+        await repo.createWish(event.body);
         emit(WishActionSuccess());
       } catch (e) {
         emit(WishActionError(e.toString()));
@@ -30,7 +30,7 @@ class WishBloc extends Bloc<WishEvent, WishState> {
     on<WishVoteRequested>((event, emit) async {
       emit(WishActionInProgress());
       try {
-        await repo.vote(wishId: event.wishId, value: event.value);
+        await repo.voteOnWish(event.wishId, event.value);
         emit(WishActionSuccess());
       } catch (e) {
         emit(WishActionError(e.toString()));
