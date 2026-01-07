@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "8854480098",
+    "project_id": "ddoh-d4ee3",
+    "storage_bucket": "ddoh-d4ee3.firebasestorage.app"
+  },
+  
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8854480098:android:c087c584438b095ca82abb",
+        "android_client_info": {
+          "package_name": "com.invio.daily_dose_of_happiness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB07iK-3mL9H612h6-FbxVZL9wuCN5PJLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
