@@ -75,10 +75,16 @@ class AuthService {
 }
  */
 
+typedef ProfileEnsurer = Future<void> Function(
+  String userId, {
+  required bool isGuest,
+});
+
 class AuthService extends ChangeNotifier {
   final SupabaseClient supabase;
+  final ProfileEnsurer? profileEnsurer;
 
-  AuthService({SupabaseClient? client})
+  AuthService({SupabaseClient? client, this.profileEnsurer})
       : supabase = client ?? Supabase.instance.client;
 
   String? _currentUserId;
@@ -103,7 +109,7 @@ class AuthService extends ChangeNotifier {
       await _createGuestUser();
     } else {
       // Optional: user_profile sicherstellen
-      await _ensureUserProfile(_currentUserId!, isGuest: true);
+      await _ensureProfile(_currentUserId!, isGuest: true);
     }
 
     notifyListeners();
@@ -121,7 +127,16 @@ class AuthService extends ChangeNotifier {
     _currentUserId = user.id;
 
     // Optional (wenn kein Trigger existiert): user_profile upsert
-    await _ensureUserProfile(user.id, isGuest: true);
+    await _ensureProfile(user.id, isGuest: true);
+  }
+
+  Future<void> _ensureProfile(String userId,
+      {required bool isGuest}) async {
+    if (profileEnsurer != null) {
+      await profileEnsurer!(userId, isGuest: isGuest);
+      return;
+    }
+    await _ensureUserProfile(userId, isGuest: isGuest);
   }
 
   Future<void> _ensureUserProfile(String userId,
@@ -152,7 +167,7 @@ class AuthService extends ChangeNotifier {
     }
 
     _currentUserId = res.user!.id;
-    await _ensureUserProfile(_currentUserId!, isGuest: false);
+    await _ensureProfile(_currentUserId!, isGuest: false);
 
     notifyListeners();
   }

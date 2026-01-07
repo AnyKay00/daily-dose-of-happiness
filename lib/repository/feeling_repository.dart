@@ -7,16 +7,18 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FeelingRepository {
-  late APICacheManager _cacheManager;
-  FeelingRepository(cachemanager) {
-    _cacheManager = cachemanager;
-  }
+  final APICacheManager _cacheManager;
+  final SupabaseClient _client;
+
+  FeelingRepository(APICacheManager cachemanager, {SupabaseClient? client})
+      : _cacheManager = cachemanager,
+        _client = client ?? Supabase.instance.client;
   Future<List<FeelingModel>> getAllFeelings() async {
     try {
       /* final session = Supabase.instance.client.auth.currentSession;
       print("session: ${session != null}");
       print("user: ${Supabase.instance.client.auth.currentUser?.id}"); */
-      final response = await Supabase.instance.client
+      final response = await _client
           .from('feeling')
           .select()
           .limit(9)
@@ -38,7 +40,7 @@ class FeelingRepository {
     try {
       String cacheString = await _cacheManager.read(happinessPackK);
       if (cacheString.isEmpty) {
-        final response = await Supabase.instance.client.rpc(
+        final response = await _client.rpc(
           'build_happiness_package',
           params: {'p_feeling_id': feelingId},
         );
@@ -70,12 +72,12 @@ class FeelingRepository {
     print('feeling id');
     print(feelingId);
     try {
-      final user = Supabase.instance.client.auth.currentUser;
+      final user = _client.auth.currentUser;
       if (user == null) {
         throw Exception(
             'No authenticated user. Ensure AuthService.init() ran.');
       }
-      final profile = await Supabase.instance.client
+      final profile = await _client
           .from('user_profile')
           .select('user_id')
           .eq('user_id', user.id)
@@ -88,7 +90,7 @@ class FeelingRepository {
       // - Unique Index auf (user_profile_id, feeling_date) existiert
       print('user profiel id');
       print(userProfileId);
-      await Supabase.instance.client.from('user_feelings').insert({
+      await _client.from('user_feelings').insert({
         'user_profile_id': userProfileId,
         'feeling_id': feelingId,
       });
