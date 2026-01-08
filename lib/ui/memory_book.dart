@@ -2,11 +2,13 @@ import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_bloc.d
 import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_state.dart';
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
 import 'package:daily_dose_of_happiness/model/memory_book/daily_entry_mb_model.dart';
+import 'package:daily_dose_of_happiness/service/push_notification_controller.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MemoryBookScreen extends StatefulWidget {
@@ -17,10 +19,10 @@ class MemoryBookScreen extends StatefulWidget {
 }
 
 class _MemoryBookScreenState extends State<MemoryBookScreen> {
-  bool _activePush = false;
   double width = 0;
   String version = '0.1.0';
   String buildNumber = '1.0';
+  bool _activeEmail = false;
 
   final Uri _imprintlink = Uri.parse(
       'https://anykay00.github.io/daily-dose-of-happiness/index.html#about');
@@ -30,6 +32,14 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PushNotificationController>().refresh();
+    });
   }
 
   @override
@@ -121,29 +131,28 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
         Text('Einstellungen',
             style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
         SizedBox(height: 10),
-        //push
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Push-Benachrichtigungen',
-              style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
-            ),
-            StatefulBuilder(
-              builder: (context, setter) {
-                return Switch(
-                  value: _activePush,
+        Consumer<PushNotificationController>(
+          builder: (context, controller, _) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Push-Benachrichtigungen',
+                  style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
+                ),
+                Switch(
+                  value: controller.enabled,
                   activeColor: Colors.green[600],
                   activeTrackColor: Colors.green[100],
-                  onChanged: (value) {
-                    setter(() {
-                      _activePush = value;
-                    });
-                  },
-                );
-              },
-            ),
-          ],
+                  onChanged: controller.loading
+                      ? null
+                      : (value) {
+                          controller.setEnabled(value);
+                        },
+                ),
+              ],
+            );
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,12 +164,12 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
             StatefulBuilder(
               builder: (context, setter) {
                 return Switch(
-                  value: _activePush,
+                  value: _activeEmail,
                   activeColor: Colors.green[600],
                   activeTrackColor: Colors.green[100],
                   onChanged: (value) {
                     setter(() {
-                      _activePush = value;
+                      _activeEmail = value;
                     });
                   },
                 );
