@@ -17,6 +17,10 @@ import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
+import 'package:daily_dose_of_happiness/service/push_notification_controller.dart';
+import 'package:daily_dose_of_happiness/service/push_notification_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,8 +28,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await Firebase.initializeApp();
   await Supabase.initialize(
     url: baseUrl,
     anonKey: apiKey,
@@ -39,18 +45,24 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.pushService});
+
+  final PushNotificationClient? pushService;
 
   @override
   Widget build(BuildContext context) {
     APICacheManager cacheManager = APICacheManager();
     final feelingRepo = FeelingRepository(cacheManager);
     final wishRepo = WishRepository(Supabase.instance.client);
+    final pushClient = pushService ?? PushNotificationService();
 
     return MultiProvider(
         providers: [
           Provider<APICacheManager>.value(value: cacheManager),
-          ChangeNotifierProvider<AuthService>(create: (_) => AuthService())
+          ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+          ChangeNotifierProvider<PushNotificationController>(
+            create: (_) => PushNotificationController(service: pushClient),
+          )
         ],
         builder: (context, widget) {
           return MultiBlocProvider(
@@ -115,6 +127,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
     try {
       // Wichtig: init() setzt currentUserId aus Session ODER erstellt Guest
       await context.read<AuthService>().init();
+      await context.read<PushNotificationController>().bootstrap();
 
       if (!mounted) return;
       // Nach erfolgreichem Bootstrap in die App weiter
