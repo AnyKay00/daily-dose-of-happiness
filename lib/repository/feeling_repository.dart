@@ -69,8 +69,7 @@ class FeelingRepository {
   }
 
   Future<String?> sendDailyFeeling(String feelingId) async {
-    print('feeling id');
-    print(feelingId);
+
     try {
       final user = _client.auth.currentUser;
       if (user == null) {
@@ -88,8 +87,7 @@ class FeelingRepository {
       // Voraussetzung für sauberen Upsert:
       // - Spalte feeling_date (date) existiert
       // - Unique Index auf (user_profile_id, feeling_date) existiert
-      print('user profiel id');
-      print(userProfileId);
+     
       await _client.from('user_feelings').insert({
         'user_profile_id': userProfileId,
         'feeling_id': feelingId,

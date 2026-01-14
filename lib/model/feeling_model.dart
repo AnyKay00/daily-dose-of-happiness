@@ -15,7 +15,6 @@ class FeelingModel {
   factory FeelingModel.fromJson(Map<String, dynamic> json) {
     return FeelingModel(
       id: json['id']?.toString() ?? '',
-      //todo from ennum
       feelingName: FeelingEnum.values
           .firstWhere((e) => (json['description']?.toString() ?? '') == e.name),
       feelingColor: json['color'] != null

@@ -2,6 +2,8 @@ import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feel
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_state.dart';
+import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_event.dart';
 import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_event.dart';
 import 'package:daily_dose_of_happiness/model/dailys/happiness_package_model.dart';
@@ -397,8 +399,8 @@ class _FeedScreenState extends State<FeedScreen> {
     return GestureDetector(
       onTap: () {
         //trigger bloc
-        BlocProvider.of<FeelingListBloc>(context)
-            .add(LoadLastWeekFeelingsEvent());
+        BlocProvider.of<MemoryBookBloc>(context)
+            .add(LoadLast7DaysFeelingsEvent());
 
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MemoryBookScreen()));

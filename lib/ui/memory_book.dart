@@ -1,6 +1,7 @@
-import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
-import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_state.dart';
-import 'package:daily_dose_of_happiness/model/user_feeling_model.dart';
+import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_bloc.dart';
+import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_state.dart';
+import 'package:daily_dose_of_happiness/model/feeling_model.dart';
+import 'package:daily_dose_of_happiness/model/memory_book/daily_entry_mb_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -222,38 +223,27 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
   } */
 
   Widget _buildWeekFeelings() {
-    return BlocBuilder<FeelingListBloc, FeelingListState>(
+    return BlocBuilder<MemoryBookBloc, MemoryBookState>(
       builder: (context, state) {
-        if (state is LoadingFeelingListState) {
+        if (state is LoadingMemoryBookState) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is LoadedLastWeekFeelingListState) {
-          final List<UserFeelingModel> feelings = state.feelings;
+        if (state is LoadedLast7DaysFeelingsMemoryBookState) {
+          final List<DailyEntryMB> entries = state.entries;
 
           final DateTime today = DateTime.now();
-
-          // Map: "yyyy-MM-dd" -> UserFeelingModel
-          final Map<String, UserFeelingModel> feelingsByDate = {
-            for (final f in feelings) _dateKey(f.date): f,
-          };
-
-          // letzte 6 Kalendertage inkl. heute
-          final List<DateTime> lastSixDays = List.generate(6, (index) {
-            final d = today.subtract(Duration(days: 5 - index));
-            return DateTime(d.year, d.month, d.day);
-          });
+          print('entries.length');
+          print(entries[6].feeling);
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: lastSixDays.map((day) {
-              final bool isToday = _isSameDay(day, today);
-              final String key = _dateKey(day);
-
-              final UserFeelingModel? feelingForDay = feelingsByDate[key];
+            children: entries.map((e) {
+              final bool isToday = _isSameDay(e.day, today);
+              final FeelingModel? feelingForDay = e.feeling;
 
               return _DayFeelingItem(
-                date: day,
-                width: width > 900 ? 80 : width / 7,
+                date: e.day,
+                width: width > 900 ? 75 : width / 7.5,
                 feeling: feelingForDay, // kann null sein → Platzhalter
                 isToday: isToday,
               );
@@ -261,7 +251,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
           );
         }
 
-        if (state is FailedLoadFeelingListState) {
+        if (state is MemoryBookErrorState) {
           return const Center(
             child: Text("Es ist ein Fehler aufgetreten, versuche es erneut."),
           );
@@ -281,17 +271,16 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
 
 class _DayFeelingItem extends StatelessWidget {
   final DateTime date;
-  final UserFeelingModel? feeling;
+  final FeelingModel? feeling;
   final bool isToday;
   final double width;
 
   const _DayFeelingItem({
-    Key? key,
     required this.date,
     required this.width,
     required this.feeling,
     required this.isToday,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +294,7 @@ class _DayFeelingItem extends StatelessWidget {
           height: width,
           child: (feeling != null)
               ? Image.asset(
-                  'assets/feelings/pina_${feeling!.feeling.feelingName.name}.png',
+                  'assets/feelings/pina_${feeling!.feelingName.name}.png',
                 )
               : Container(
                   decoration: BoxDecoration(
@@ -318,7 +307,7 @@ class _DayFeelingItem extends StatelessWidget {
         Text(
           dateText,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isToday ? 22 : 18,
             fontWeight: isToday ? FontWeight.bold : FontWeight.w400,
           ),
         ),
