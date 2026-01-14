@@ -1,7 +1,7 @@
 import 'package:daily_dose_of_happiness/model/feeling_model.dart';
 
 class DailyEntryMB {
-  final DateTime day; // Date (00:00)
+  final DateTime day; 
   final FeelingModel? feeling;
   final DateTime? createdAt;
 
