@@ -6,9 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ConsentGate extends StatefulWidget {
   final Widget child; // deine AppShell/Home
-  final ConsentRepository repo;
 
-  const ConsentGate({super.key, required this.child, required this.repo});
+  const ConsentGate({super.key, required this.child});
 
   @override
   State<ConsentGate> createState() => _ConsentGateState();
@@ -19,10 +18,12 @@ class _ConsentGateState extends State<ConsentGate> {
   bool _needsConsent = false;
   LegalDoc? _privacyDoc;
   LegalDoc? _termsDoc; // optional
+  late ConsentRepository repo;
 
   @override
   void initState() {
     super.initState();
+    repo = ConsentRepository(Supabase.instance.client);
     _run();
   }
 
@@ -39,15 +40,15 @@ class _ConsentGateState extends State<ConsentGate> {
         return;
       }
 
-      final compliance = await widget.repo.checkCompliance();
+      final compliance = await repo.checkCompliance();
       final anyMissing = compliance.any((c) => !c.isOk);
 
       if (anyMissing) {
         // Hole aktive Docs für Anzeige/Links
-        final privacy = await widget.repo.fetchActiveDoc('privacy_policy');
+        final privacy = await repo.fetchActiveDoc('privacy_policy');
 
         // optional:
-        // final terms = await widget.repo.fetchActiveDoc('terms');
+        // final terms = await repo.fetchActiveDoc('terms');
 
         setState(() {
           _privacyDoc = privacy;

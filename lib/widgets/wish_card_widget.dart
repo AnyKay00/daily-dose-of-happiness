@@ -1,6 +1,6 @@
 import 'package:daily_dose_of_happiness/model/wish/wish_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/status_pill_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/status_pill_widget.dart';
 import 'package:flutter/material.dart';
 
 class WishFeedCardWidget extends StatelessWidget {

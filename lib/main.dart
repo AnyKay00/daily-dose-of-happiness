@@ -19,6 +19,7 @@ import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
+import 'package:daily_dose_of_happiness/widgets/consent_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -91,7 +92,7 @@ class MyApp extends StatelessWidget {
                     ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
                 useMaterial3: true,
               ),
-              home: AppBootstrapScreen(),
+              home: ConsentGate(child: AppBootstrapScreen()),
             ),
           );
         });

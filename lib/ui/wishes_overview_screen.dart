@@ -5,9 +5,9 @@ import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_bloc.dart'
 import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/wish_list_bloc/wish_list_state.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/error_empty_state_widget.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/wish_bottomsheet_widget.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/wish_card_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/error_empty_state_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/wish_bottomsheet_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/wish_card_widget.dart';
 import 'package:daily_dose_of_happiness/ui/wish_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -2,8 +2,8 @@ import 'package:daily_dose_of_happiness/bloc/wish_bloc/wish_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/wish_bloc/wish_event.dart';
 import 'package:daily_dose_of_happiness/model/wish/wish_model.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/status_pill_widget.dart';
-import 'package:daily_dose_of_happiness/ui/widgets/wish_card_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/status_pill_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/wish_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
