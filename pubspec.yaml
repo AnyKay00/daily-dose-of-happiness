@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.20.2
   #arc and forms
   clippy_flutter: ^2.0.0-nullsafety.1
+  app_version_update: ^6.0.0
   flutter_svg: ^1.1.6
   flutter_bloc: ^8.1.2
   provider: ^6.0.3

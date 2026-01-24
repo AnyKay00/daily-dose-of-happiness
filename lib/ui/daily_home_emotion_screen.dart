@@ -3,7 +3,6 @@ import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_b
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_state.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
-import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_state.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_event.dart';
@@ -107,7 +106,9 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           children: [
             Text(
               "Daily Check-in",
-              style: AppTextStyle.getdynamicTextStyle(AppColors.textColor, 20),
+              style: AppTextStyle.getdynamicTextStyle(
+                      AppColors.textColor.withAlpha(150), 20)
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
             Spacer(),
             Text(

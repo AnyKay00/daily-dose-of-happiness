@@ -140,7 +140,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       onPressed: (_checked && !_saving) ? _accept : null,
                       style: ButtonStyle(
                           backgroundColor:
-                              WidgetStatePropertyAll(Colors.white)),
+                              WidgetStatePropertyAll(AppColors.primaryColor)),
                       child: _saving
                           ? const SizedBox(
                               height: 18,

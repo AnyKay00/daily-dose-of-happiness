@@ -11,7 +11,7 @@ class AppColors {
 
   static const Color backgroundColor = Color(0xFFFAF9F7);
 
-  static const Color textColor = Color(0xFF0E1B1C);
+  static const Color textColor = Color.fromARGB(255, 20, 25, 26);
 
   static const Color ligthTextColor = Color.fromARGB(255, 160, 160, 160);
 
@@ -38,18 +38,22 @@ class AppGradients {
       begin: Alignment.topRight,
       end: Alignment.bottomCenter,
       colors: [
+        Color.fromARGB(255, 97, 156, 178),
         AppColors.primaryColor,
         AppColors.secondaryColor,
       ]);
   static LinearGradient backgroundGradient = const LinearGradient(
-      begin: Alignment.topRight,
+      begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      stops: [
-        0.3,
-        0.7,
+      /*  stops: [
+        0.00001,
+        0.1,
+        0.57,
         0.99999
-      ],
+      ], */
       colors: [
+        Color.fromARGB(255, 29, 76, 93),
+        Color.fromARGB(255, 97, 156, 178),
         AppColors.primaryColor,
         //   Color(0xFF7CAEC1),
         Color(0xFFBFCAA6),

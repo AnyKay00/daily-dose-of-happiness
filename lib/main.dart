@@ -1,5 +1,7 @@
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
+
+import 'package:app_version_update/app_version_update.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
@@ -20,6 +22,7 @@ import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/widgets/consent_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/update_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -108,6 +111,7 @@ class AppBootstrapScreen extends StatefulWidget {
 
 class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
   bool _didInit = false;
+  bool checkedVersion = false;
 
   @override
   void didChangeDependencies() {
@@ -115,6 +119,43 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
     if (_didInit) return;
     _didInit = true;
     _bootstrap();
+  }
+
+  void checkVersion(BuildContext context) async {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    if (isIOS) {
+      //TODO
+      await AppVersionUpdate.checkForUpdates(
+        appleId: "6449080903",
+        playStoreId: "com.invio.dailydoseofhappiness",
+        country: 'de',
+      ).then((data) async {
+        if (data.canUpdate! && checkedVersion == false) {
+          checkedVersion = true;
+
+          await showDialog(
+            barrierDismissible: false,
+            fullscreenDialog: true,
+            context: context,
+            builder: (context) =>
+                AppVersionUpdateDialog(appVersionResult: data),
+          );
+        }
+      });
+    } else {
+      await AppVersionUpdate.checkForUpdates().then((data) async {
+        if (data.canUpdate! && checkedVersion == false) {
+          checkedVersion = true;
+
+          await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) =>
+                AppVersionUpdateDialog(appVersionResult: data),
+          );
+        }
+      });
+    }
   }
 
   Future<void> _bootstrap() async {
@@ -142,7 +183,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.secondaryColor,
       body: Center(child: CircularProgressIndicator()),
     );
   }

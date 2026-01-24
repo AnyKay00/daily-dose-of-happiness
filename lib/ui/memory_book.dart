@@ -24,6 +24,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
 
   final Uri _imprintlink = Uri.parse(
       'https://anykay00.github.io/daily-dose-of-happiness/index.html#about');
+  final Uri _privacylink = Uri.parse('https://ddoh.lioverse.de/privacy-app');
 
   void initVersionNumber() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -85,6 +86,8 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
           Divider(height: 80),
           _buildSettings(),
           Divider(height: 90),
+          _buildAboutUs(),
+          Divider(height: 90),
           _buildImprint()
           //saved dailys
           //Text('Gespeicherte Einträge',
@@ -94,6 +97,20 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
           //settings
         ],
       ),
+    );
+  }
+
+  Widget _buildAboutUs() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Über uns',
+            style: AppTextStyle.getdynamicTextStyle(Colors.black, 20)),
+        SizedBox(height: 10),
+        Text(
+            'Daily Dose Of Happiness wurde entwickelt, um dir zu helfen, deine täglichen Gefühle zu verfolgen und positive Gewohnheiten zu fördern. Unser Ziel ist es, deinen Tag etwas positiver zu machen. Wir versuchen das Bewusstsein und die Aufmerksamkeit auf Mental Health zu stärken, dabei aber die kleinen positiven Dinge nie außer Acht zu lassen.\n\nEnjoy your day! :)',
+            style: AppTextStyle.getdynamicTextStyle(Colors.black, 16)),
+      ],
     );
   }
 
@@ -166,9 +183,6 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
         Center(
             child: Text('Version: $version',
                 style: AppTextStyle.getdynamicTextStyle(Colors.black, 16))),
-        Center(
-            child: Text('Build: $version',
-                style: AppTextStyle.getdynamicTextStyle(Colors.black, 16))),
 
         Padding(
           padding: const EdgeInsets.only(top: 18.0),
@@ -191,8 +205,8 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
             child: const Text('Imprint')),
         TextButton(
             onPressed: () async {
-              if (!await launchUrl(_imprintlink)) {
-                throw Exception('Could not launch $_imprintlink');
+              if (!await launchUrl(_privacylink)) {
+                throw Exception('Could not launch $_privacylink');
               }
             },
             child: const Text('Private Policy')),
@@ -233,17 +247,16 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
           final List<DailyEntryMB> entries = state.entries;
 
           final DateTime today = DateTime.now();
-          print('entries.length');
-          print(entries[6].feeling);
+
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: entries.map((e) {
               final bool isToday = _isSameDay(e.day, today);
               final FeelingModel? feelingForDay = e.feeling;
-
+              print(width);
               return _DayFeelingItem(
                 date: e.day,
-                width: width > 900 ? 75 : width / 7.5,
+                width: width > 900 ? 75 : width / 8,
                 feeling: feelingForDay, // kann null sein → Platzhalter
                 isToday: isToday,
               );

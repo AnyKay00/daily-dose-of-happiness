@@ -1,5 +1,3 @@
-import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
-import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/happiness_pack_bloc/happiness_pack_state.dart';
 import 'package:daily_dose_of_happiness/bloc/memory_book_bloc/memory_book_bloc.dart';
@@ -89,7 +87,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget _getBody() {
     var height = MediaQuery.of(context).size.height;
     return Container(
-      decoration: BoxDecoration(gradient: AppGradients.backgroundGradient),
+      decoration: BoxDecoration(gradient: AppGradients.linearGradient),
       height: height,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Stack(children: [

@@ -1,5 +1,6 @@
 import 'package:daily_dose_of_happiness/model/legal_doc_model.dart';
 import 'package:daily_dose_of_happiness/repository/config_repository.dart';
+import 'package:daily_dose_of_happiness/static/style.dart';
 import 'package:daily_dose_of_happiness/ui/consent_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,10 +30,8 @@ class _ConsentGateState extends State<ConsentGate> {
 
   Future<void> _run() async {
     try {
-      // Voraussetzung: user ist eingeloggt (auch anon)
       final user = Supabase.instance.client.auth.currentUser;
       if (user == null) {
-        // In deinem Bootstrap: erst anon sign-in, dann Gate.
         setState(() {
           _loading = false;
           _needsConsent = true;
@@ -47,7 +46,6 @@ class _ConsentGateState extends State<ConsentGate> {
         // Hole aktive Docs für Anzeige/Links
         final privacy = await repo.fetchActiveDoc('privacy_policy');
 
-        // optional:
         // final terms = await repo.fetchActiveDoc('terms');
 
         setState(() {
@@ -63,7 +61,6 @@ class _ConsentGateState extends State<ConsentGate> {
         });
       }
     } catch (_) {
-      // Marktüblich: Fail-safe = blocken, statt “durchlassen”
       setState(() {
         _needsConsent = true;
         _loading = false;
@@ -74,7 +71,9 @@ class _ConsentGateState extends State<ConsentGate> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+          backgroundColor: AppColors.secondaryColor,
+          body: Center(child: CircularProgressIndicator()));
     }
 
     if (_needsConsent) {
@@ -82,7 +81,7 @@ class _ConsentGateState extends State<ConsentGate> {
         privacyDoc: _privacyDoc,
         // termsDoc: _termsDoc,
         onAccepted: () async {
-          await _run(); // nach accept neu prüfen und dann in child
+          await _run();
         },
       );
     }
