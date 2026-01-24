@@ -28,6 +28,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
     }
   }
 
+  Future<void> _ensureUserExists() async {
+    final client = Supabase.instance.client;
+    if (client.auth.currentUser != null) return;
+
+    // Marktüblich: anon user erzeugen, damit Consent serverseitig gespeichert werden kann
+    await client.auth.signInAnonymously();
+  }
+
   Future<void> _accept() async {
     setState(() {
       _saving = true;
@@ -35,6 +43,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
     });
 
     try {
+      //signin anonymoues 
+      await _ensureUserExists();
       final doc = widget.privacyDoc;
       if (doc == null) throw Exception('Missing active privacy policy');
 

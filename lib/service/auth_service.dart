@@ -102,8 +102,6 @@ class AuthService extends ChangeNotifier {
       _currentUserId = data.session?.user.id;
       notifyListeners();
     });
-    print('current user id :');
-    print(_currentUserId);
     // 3) Wenn noch kein User existiert, erstelle Guest/Anonymous User
     if (_currentUserId == null) {
       await _createGuestUser();
@@ -117,8 +115,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> _createGuestUser() async {
     final res = await supabase.auth.signInAnonymously();
-    print('responsefrom anon sign in: $res');
-
+  
     final user = res.user;
     if (user == null) {
       throw Exception('Anonymous sign-in failed: user is null');

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ConsentGate extends StatefulWidget {
-  final Widget child; // deine AppShell/Home
+  final Widget child;
 
   const ConsentGate({super.key, required this.child});
 
@@ -18,7 +18,7 @@ class _ConsentGateState extends State<ConsentGate> {
   bool _loading = true;
   bool _needsConsent = false;
   LegalDoc? _privacyDoc;
-  LegalDoc? _termsDoc; // optional
+  //LegalDoc? _termsDoc; // optional
   late ConsentRepository repo;
 
   @override
@@ -30,15 +30,6 @@ class _ConsentGateState extends State<ConsentGate> {
 
   Future<void> _run() async {
     try {
-      final user = Supabase.instance.client.auth.currentUser;
-      if (user == null) {
-        setState(() {
-          _loading = false;
-          _needsConsent = true;
-        });
-        return;
-      }
-
       final compliance = await repo.checkCompliance();
       final anyMissing = compliance.any((c) => !c.isOk);
 

@@ -52,7 +52,7 @@ class AppGradients {
         0.99999
       ], */
       colors: [
-        Color.fromARGB(255, 29, 76, 93),
+        Color.fromARGB(255, 42, 93, 112),
         Color.fromARGB(255, 97, 156, 178),
         AppColors.primaryColor,
         //   Color(0xFF7CAEC1),

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:daily_dose_of_happiness/model/dailys/action_model.dart';
 import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/const_variables.dart';
-
 import 'package:http/http.dart';
 import '../service/local_storage_manager.dart';
 

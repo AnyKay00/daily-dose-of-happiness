@@ -21,7 +21,7 @@ import 'package:daily_dose_of_happiness/service/bloc_handler.dart';
 import 'package:daily_dose_of_happiness/service/local_storage_manager.dart';
 import 'package:daily_dose_of_happiness/service/wrapper.dart';
 import 'package:daily_dose_of_happiness/static/style.dart';
-import 'package:daily_dose_of_happiness/widgets/consent_widget.dart';
+import 'package:daily_dose_of_happiness/widgets/consent_gate_widget.dart';
 import 'package:daily_dose_of_happiness/widgets/update_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

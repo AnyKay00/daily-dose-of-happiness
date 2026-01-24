@@ -86,8 +86,9 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _getBody() {
     var height = MediaQuery.of(context).size.height;
+    print(width);
     return Container(
-      decoration: BoxDecoration(gradient: AppGradients.linearGradient),
+      decoration: BoxDecoration(gradient: AppGradients.backgroundGradient),
       height: height,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Stack(children: [
@@ -105,7 +106,7 @@ class _FeedScreenState extends State<FeedScreen> {
         Align(alignment: Alignment.topRight, child: _getHeader()),
 
         _DotsIndicator(
-            expanded: width > 900 ? true : false, count: 3, index: _pageIndex),
+            expanded: width > 800 ? true : false, count: 3, index: _pageIndex),
         // Intro-Overlay mit Pina + Sprechblase
         if (_showIntro)
           Positioned(
@@ -458,9 +459,9 @@ class _DotsIndicator extends StatelessWidget {
           height: expanded && isActive
               ? 28
               : !expanded && isActive
-                  ? 20
-                  : 10,
-          width: expanded ? 15 : 10,
+                  ? 10
+                  : 18,
+          width: expanded ? 18 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
             border: Border.all(width: 0.5, color: Colors.white),

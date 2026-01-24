@@ -84,8 +84,10 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
         if (_pageIndex != 0)
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child:
-                _DotsIndicator(count: feelings.length, index: _pageIndex - 1),
+            child: _DotsIndicator(
+                expanded: width > 800 ? true : false,
+                count: feelings.length,
+                index: _pageIndex - 1),
           ),
       ],
     );
@@ -236,10 +238,12 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
 
 class _DotsIndicator extends StatelessWidget {
   final int count;
+  final bool expanded;
   final int index;
 
   const _DotsIndicator({
     required this.count,
+    required this.expanded,
     required this.index,
   });
 
@@ -252,8 +256,12 @@ class _DotsIndicator extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          height: isActive ? 18 : 8,
-          width: 8,
+          height: expanded && isActive
+              ? 28
+              : !expanded && isActive
+                  ? 10
+                  : 18,
+          width: expanded ? 18 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
             border: Border.all(width: 0.5, color: Colors.white),
