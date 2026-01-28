@@ -46,6 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isLast = _pageIndex == _pageCount - 1;
 
     return Scaffold(
+      backgroundColor: AppColors.primaryColor,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(gradient: AppGradients.backgroundGradient),

@@ -133,28 +133,32 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
         SizedBox(height: 10),
         Consumer<PushNotificationController>(
           builder: (context, controller, _) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Push-Benachrichtigungen',
-                  style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
-                ),
-                Switch(
-                  value: controller.enabled,
-                  activeColor: Colors.green[600],
-                  activeTrackColor: Colors.green[100],
-                  onChanged: controller.loading
-                      ? null
-                      : (value) {
-                          controller.setEnabled(value);
-                        },
-                ),
-              ],
+            return StatefulBuilder(
+              builder: (context,setter) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Push-Benachrichtigungen',
+                      style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
+                    ),
+                    Switch(
+                      value: controller.enabled,
+                      activeThumbColor: Colors.green[600],
+                      activeTrackColor: Colors.green[100],
+                      onChanged: controller.loading
+                          ? null
+                          : (value) {
+                              controller.setEnabled(value);
+                            },
+                    ),
+                  ],
+                );
+              }
             );
           },
         ),
-        Row(
+        /*  Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -176,7 +180,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
               },
             ),
           ],
-        ),
+        ), */
       ],
     );
   }
@@ -262,7 +266,7 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
             children: entries.map((e) {
               final bool isToday = _isSameDay(e.day, today);
               final FeelingModel? feelingForDay = e.feeling;
-              print(width);
+
               return _DayFeelingItem(
                 date: e.day,
                 width: width > 900 ? 75 : width / 8,

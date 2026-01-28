@@ -43,7 +43,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
     });
 
     try {
-      //signin anonymoues 
+      //signin anonymoues
       await _ensureUserExists();
       final doc = widget.privacyDoc;
       if (doc == null) throw Exception('Missing active privacy policy');
@@ -74,10 +74,11 @@ class _ConsentScreenState extends State<ConsentScreen> {
     final doc = widget.privacyDoc;
 
     return PopScope(
-      canPop: false, // Back-Button deaktivieren
+      canPop: false,
       child: Scaffold(
         backgroundColor: AppColors.secondaryColor,
-        body: SafeArea(
+        body: Container(
+          decoration: BoxDecoration(gradient: AppGradients.secondaryGradient),
           child: Padding(
             padding: const EdgeInsets.all(40),
             child: Center(

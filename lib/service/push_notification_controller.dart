@@ -15,7 +15,6 @@ class PushNotificationController extends ChangeNotifier {
   bool get loading => _loading;
   bool get isInitialized => _initialized;
   bool get enabled => _preference.enabled;
-  TimeOfDay? get deliveryTime => _preference.deliveryTime;
   String? get error => _error;
 
   Future<void> bootstrap() async {
@@ -31,6 +30,7 @@ class PushNotificationController extends ChangeNotifier {
     notifyListeners();
     try {
       _preference = await _service.fetchPreference();
+      print(_preference.enabled);
     } catch (error) {
       _error = error.toString();
     } finally {
@@ -44,23 +44,13 @@ class PushNotificationController extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     try {
+      print('bool');
+      print(enabled);
       _preference = await _service.setEnabled(enabled);
+      print(_preference.enabled);
     } catch (error) {
       _error = error.toString();
-    } finally {
-      _loading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> updateTime(TimeOfDay timeOfDay) async {
-    _error = null;
-    _loading = true;
-    notifyListeners();
-    try {
-      _preference = await _service.updateDeliveryTime(timeOfDay);
-    } catch (error) {
-      _error = error.toString();
+      print(_error);
     } finally {
       _loading = false;
       notifyListeners();

@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-const AndroidNotificationChannel _defaultAndroidChannel = AndroidNotificationChannel(
+const AndroidNotificationChannel _defaultAndroidChannel =
+    AndroidNotificationChannel(
   'daily_dose_general',
   'Daily Dose Notifications',
   description: 'All reminders sent from Daily Dose of Happiness.',
@@ -20,30 +21,29 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class PushNotificationPreference {
   final bool enabled;
-  final TimeOfDay? deliveryTime;
 
-  const PushNotificationPreference({required this.enabled, this.deliveryTime});
+  const PushNotificationPreference({required this.enabled});
 
   static const empty = PushNotificationPreference(enabled: false);
 
-  PushNotificationPreference copyWith({bool? enabled, TimeOfDay? deliveryTime}) {
+  PushNotificationPreference copyWith(
+      {bool? enabled, TimeOfDay? deliveryTime}) {
     return PushNotificationPreference(
       enabled: enabled ?? this.enabled,
-      deliveryTime: deliveryTime ?? this.deliveryTime,
     );
   }
 
   factory PushNotificationPreference.fromJson(Map<String, dynamic>? json) {
     if (json == null) return empty;
-    final hour = json['daily_push_hour'];
+    /*  final hour = json['daily_push_hour'];
     final minute = json['daily_push_minute'];
     TimeOfDay? time;
     if (hour is num && minute is num) {
       time = TimeOfDay(hour: hour.toInt(), minute: minute.toInt());
-    }
+    }  */
     return PushNotificationPreference(
       enabled: json['daily_push_enabled'] == true,
-      deliveryTime: time,
+      //deliveryTime: time,
     );
   }
 
@@ -51,8 +51,6 @@ class PushNotificationPreference {
     return {
       'user_id': userId,
       'daily_push_enabled': enabled,
-      'daily_push_hour': deliveryTime?.hour,
-      'daily_push_minute': deliveryTime?.minute,
     };
   }
 }
@@ -61,7 +59,6 @@ abstract class PushNotificationClient {
   Future<void> initialize();
   Future<PushNotificationPreference> fetchPreference();
   Future<PushNotificationPreference> setEnabled(bool enabled);
-  Future<PushNotificationPreference> updateDeliveryTime(TimeOfDay timeOfDay);
 }
 
 class PushNotificationService implements PushNotificationClient {
@@ -94,8 +91,9 @@ class PushNotificationService implements PushNotificationClient {
     await _ensureAndroidChannel();
 
     final settings = await _messaging.requestPermission();
-    _permissionGranted = settings.authorizationStatus == AuthorizationStatus.authorized ||
-        settings.authorizationStatus == AuthorizationStatus.provisional;
+    _permissionGranted =
+        settings.authorizationStatus == AuthorizationStatus.authorized ||
+            settings.authorizationStatus == AuthorizationStatus.provisional;
 
     if (_permissionGranted) {
       await _persistCurrentToken();
@@ -106,8 +104,9 @@ class PushNotificationService implements PushNotificationClient {
   }
 
   Future<void> _ensureAndroidChannel() async {
-    final androidImpl = _localNotifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    final androidImpl =
+        _localNotifications.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
     await androidImpl?.createNotificationChannel(_defaultAndroidChannel);
   }
 
@@ -143,7 +142,7 @@ class PushNotificationService implements PushNotificationClient {
     try {
       final response = await _supabase
           .from('user_profile')
-          .select('daily_push_enabled,daily_push_hour,daily_push_minute')
+          .select('daily_push_enabled')
           .eq('user_id', uid)
           .maybeSingle();
       return PushNotificationPreference.fromJson(response);
@@ -172,12 +171,6 @@ class PushNotificationService implements PushNotificationClient {
     return _upsertPreference(current.copyWith(enabled: enabled));
   }
 
-  @override
-  Future<PushNotificationPreference> updateDeliveryTime(TimeOfDay timeOfDay) async {
-    final current = await fetchPreference();
-    return _upsertPreference(current.copyWith(deliveryTime: timeOfDay));
-  }
-
   Future<PushNotificationPreference> _upsertPreference(
       PushNotificationPreference preference) async {
     final uid = _supabase.auth.currentUser?.id;
@@ -190,7 +183,7 @@ class PushNotificationService implements PushNotificationClient {
       final response = await _supabase
           .from('user_profile')
           .upsert(payload, onConflict: 'user_id')
-          .select('daily_push_enabled,daily_push_hour,daily_push_minute')
+          .select('daily_push_enabled')
           .single();
 
       if (preference.enabled && _permissionGranted) {

@@ -17,7 +17,6 @@ class ErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(message);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(18),

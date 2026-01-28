@@ -42,6 +42,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: BlocBuilder<FeelingListBloc, FeelingListState>(
         builder: (context, state) {
           if (state is LoadingFeelingListState || state is InitFeelingState) {
@@ -178,8 +179,6 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
               alignment: Alignment.bottomCenter,
               child: GestureDetector(
                 onTap: () {
-                  print(feeling.feelingName.name);
-                  print(feeling.id);
                   //increment chosed feeling to cache
                   int newCounter = widget.selectedFeelingCount + 1;
                   Map<String, String> json = {

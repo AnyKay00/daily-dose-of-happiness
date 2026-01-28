@@ -55,7 +55,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.secondaryColor,
       body: BlocBuilder<HappinessPackBloc, HappinessPackState>(
           builder: (context, state) {
         if (state is LoadedHappinessPackState) {
@@ -86,7 +86,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _getBody() {
     var height = MediaQuery.of(context).size.height;
-    print(width);
+
     return Container(
       decoration: BoxDecoration(gradient: AppGradients.backgroundGradient),
       height: height,

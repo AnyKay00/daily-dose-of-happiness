@@ -59,6 +59,19 @@ class AppGradients {
         Color(0xFFBFCAA6),
         AppColors.secondaryColor,
       ]);
+
+  static LinearGradient secondaryGradient = const LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [
+        0.0001,
+        0.2,
+      ],
+      colors: [
+        Color.fromARGB(255, 183, 162, 84),
+        AppColors.secondaryColor,
+      ]);
+
   static LinearGradient pinaGradient = const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomCenter,
