@@ -138,7 +138,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onPressed: _next,
                         style: ButtonStyle(
                             backgroundColor:
-                                WidgetStatePropertyAll(Colors.white)),
+                                WidgetStatePropertyAll(AppColors.primaryColor)),
                         child: Text(
                           isLast ? 'Lass uns starten' : 'Weiter',
                           style: AppTextStyle.getdynamicTextStyle(
@@ -256,9 +256,8 @@ class _DotsIndicator extends StatelessWidget {
           height: 8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
-            color: isActive
-                ? AppColors.secondaryColor.withAlpha(130)
-                : Colors.white,
+            color:
+                isActive ? AppColors.primaryColor.withAlpha(130) : Colors.white,
           ),
         );
       }),

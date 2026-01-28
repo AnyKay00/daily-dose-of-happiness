@@ -124,7 +124,6 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
   void checkVersion(BuildContext context) async {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     if (isIOS) {
-      //TODO
       await AppVersionUpdate.checkForUpdates(
         appleId: "6449080903",
         playStoreId: "com.invio.dailydoseofhappiness",
