@@ -22,7 +22,6 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
   double width = 0;
   String version = '0.1.0';
   String buildNumber = '1.0';
-  bool _activeEmail = false;
 
   final Uri _imprintlink = Uri.parse(
       'https://anykay00.github.io/daily-dose-of-happiness/index.html#about');
@@ -133,29 +132,27 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
         SizedBox(height: 10),
         Consumer<PushNotificationController>(
           builder: (context, controller, _) {
-            return StatefulBuilder(
-              builder: (context,setter) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Push-Benachrichtigungen',
-                      style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
-                    ),
-                    Switch(
-                      value: controller.enabled,
-                      activeThumbColor: Colors.green[600],
-                      activeTrackColor: Colors.green[100],
-                      onChanged: controller.loading
-                          ? null
-                          : (value) {
-                              controller.setEnabled(value);
-                            },
-                    ),
-                  ],
-                );
-              }
-            );
+            return StatefulBuilder(builder: (context, setter) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Push-Benachrichtigungen',
+                    style: AppTextStyle.getdynamicTextStyle(Colors.black, 18),
+                  ),
+                  Switch(
+                    value: controller.enabled,
+                    activeThumbColor: Colors.green[600],
+                    activeTrackColor: Colors.green[100],
+                    onChanged: controller.loading
+                        ? null
+                        : (value) {
+                            controller.setEnabled(value);
+                          },
+                  ),
+                ],
+              );
+            });
           },
         ),
         /*  Row(
@@ -287,9 +284,6 @@ class _MemoryBookScreenState extends State<MemoryBookScreen> {
       },
     );
   }
-
-  String _dateKey(DateTime date) =>
-      '${date.year}-${date.month}-${date.day}'; // reicht für Tagesgenauigkeit
 
   bool _isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;

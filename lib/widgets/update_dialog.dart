@@ -13,6 +13,9 @@ class AppVersionUpdateDialog extends StatefulWidget {
 class _AppVersionUpdateDialogState extends State<AppVersionUpdateDialog> {
   @override
   Widget build(BuildContext context) {
+    String _url = widget.appVersionResult != null
+        ? widget.appVersionResult.storeUrl ?? 'https://ddoh.lioverse.de'
+        : 'https://ddoh.lioverse.de';
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -53,7 +56,7 @@ class _AppVersionUpdateDialogState extends State<AppVersionUpdateDialog> {
                     ),
                   ),
                   onPressed: () async => await launchUrl(
-                    Uri.parse(widget.appVersionResult!.storeUrl!),
+                    Uri.parse(_url),
                     mode: LaunchMode.externalApplication,
                   ),
                   child: Text(

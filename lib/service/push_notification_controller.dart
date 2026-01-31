@@ -30,7 +30,6 @@ class PushNotificationController extends ChangeNotifier {
     notifyListeners();
     try {
       _preference = await _service.fetchPreference();
-      print(_preference.enabled);
     } catch (error) {
       _error = error.toString();
     } finally {
@@ -44,10 +43,7 @@ class PushNotificationController extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     try {
-      print('bool');
-      print(enabled);
       _preference = await _service.setEnabled(enabled);
-      print(_preference.enabled);
     } catch (error) {
       _error = error.toString();
       print(_error);

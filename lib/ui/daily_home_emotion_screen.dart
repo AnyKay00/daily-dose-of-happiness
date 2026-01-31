@@ -258,8 +258,8 @@ class _DotsIndicator extends StatelessWidget {
           height: expanded && isActive
               ? 28
               : !expanded && isActive
-                  ? 10
-                  : 18,
+                  ? 18
+                  : 10,
           width: expanded ? 18 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),

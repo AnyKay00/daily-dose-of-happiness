@@ -135,6 +135,12 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
 
   void checkVersion(BuildContext context) async {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    await showDialog(
+      barrierDismissible: false,
+      fullscreenDialog: true,
+      context: context,
+      builder: (context) => AppVersionUpdateDialog(appVersionResult: 'data'),
+    );
     if (isIOS) {
       await AppVersionUpdate.checkForUpdates(
         appleId: "6449080903",
