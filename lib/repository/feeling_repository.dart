@@ -18,11 +18,8 @@ class FeelingRepository {
       /* final session = Supabase.instance.client.auth.currentSession;
       print("session: ${session != null}");
       print("user: ${Supabase.instance.client.auth.currentUser?.id}"); */
-      final response = await _client
-          .from('feeling')
-          .select()
-          .limit(9)
-          .timeout(15.seconds);
+      final response =
+          await _client.from('feeling').select().limit(9).timeout(15.seconds);
 
       return (response as List<dynamic>)
           .map((json) => FeelingModel.fromJson(json))
@@ -69,12 +66,11 @@ class FeelingRepository {
   }
 
   Future<String?> sendDailyFeeling(String feelingId) async {
-
     try {
       final user = _client.auth.currentUser;
       if (user == null) {
         throw Exception(
-            'No authenticated user. Ensure AuthService.init() ran.');
+            'No authenticated user. Ensure AuthService.init() ran. In FeelingRepository.sendDailyFeeling');
       }
       final profile = await _client
           .from('user_profile')
@@ -87,7 +83,7 @@ class FeelingRepository {
       // Voraussetzung für sauberen Upsert:
       // - Spalte feeling_date (date) existiert
       // - Unique Index auf (user_profile_id, feeling_date) existiert
-     
+
       await _client.from('user_feelings').insert({
         'user_profile_id': userProfileId,
         'feeling_id': feelingId,

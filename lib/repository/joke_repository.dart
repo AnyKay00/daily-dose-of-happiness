@@ -43,8 +43,7 @@ class JokeRepository {
   void saveJokeToMemoryBook(String id) async {
     String _baseUrl = baseUrl + '/joke/save/$id/';
     try {
-      Response response =
-          await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
+      await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;

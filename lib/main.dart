@@ -133,14 +133,9 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
     _bootstrap();
   }
 
-  void checkVersion(BuildContext context) async {
+  Future<void> checkVersion(BuildContext context) async {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    await showDialog(
-      barrierDismissible: false,
-      fullscreenDialog: true,
-      context: context,
-      builder: (context) => AppVersionUpdateDialog(appVersionResult: 'data'),
-    );
+
     if (isIOS) {
       await AppVersionUpdate.checkForUpdates(
         appleId: "6449080903",
@@ -163,13 +158,14 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
       await AppVersionUpdate.checkForUpdates().then((data) async {
         if (data.canUpdate! && checkedVersion == false) {
           checkedVersion = true;
-
-          await showDialog(
+          AppVersionUpdate.showBottomSheetUpdate(
+              context: context, appVersionResult: data);
+          /*   await showDialog(
             barrierDismissible: false,
             context: context,
             builder: (context) =>
                 AppVersionUpdateDialog(appVersionResult: data),
-          );
+          ); */
         }
       });
     }
@@ -180,7 +176,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
       // Wichtig: init() setzt currentUserId aus Session ODER erstellt Guest
       await context.read<AuthService>().init();
       await context.read<PushNotificationController>().bootstrap();
-
+      //checkVersion(context);
       if (!mounted) return;
       // Nach erfolgreichem Bootstrap in die App weiter
       Navigator.of(context).pushReplacement(
@@ -201,7 +197,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: AppColors.primaryColor,
       body: Center(child: CircularProgressIndicator()),
     );
   }

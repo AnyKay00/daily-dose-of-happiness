@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
 class LegalDoc {
   final String docType;
   final String version;

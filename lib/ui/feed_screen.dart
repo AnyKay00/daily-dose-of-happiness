@@ -171,8 +171,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _getMotivationContainer() {
     if (hPack.motivation != null) {
-      bool isLiked = false;
-      bool isSaved = false;
+      /*   bool isLiked = false;
+      bool isSaved = false; */
       return StatefulBuilder(builder: (context, setter) {
         return Stack(
           children: [
@@ -273,8 +273,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _getActionContainer() {
     if (hPack.action != null) {
-      bool isLiked = hPack.action!.liked;
-      bool isSaved = hPack.action!.saved;
+      /* bool isLiked = hPack.action!.liked;
+      bool isSaved = hPack.action!.saved; */
       return StatefulBuilder(builder: (context, setter) {
         return Stack(
           children: [
@@ -459,8 +459,8 @@ class _DotsIndicator extends StatelessWidget {
           height: expanded && isActive
               ? 28
               : !expanded && isActive
-                  ? 10
-                  : 18,
+                  ? 18
+                  : 10,
           width: expanded ? 18 : 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),

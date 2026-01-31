@@ -44,8 +44,6 @@ class _MockSupabaseClient extends Mock implements SupabaseClient {}
 
 class _MockGoTrueClient extends Mock implements GoTrueClient {}
 
-class _MockUser extends Mock implements User {}
-
 void main() {
   group('FeelingRepository.loadHappinessPackage', () {
     test('returns cached pack without calling RPC when cache is warm',

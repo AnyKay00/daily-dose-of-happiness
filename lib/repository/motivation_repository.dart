@@ -41,10 +41,9 @@ class MotivationRepository {
   }
 
   void saveMotivationToMemoryBook(String id) async {
-    String _baseUrl = baseUrl + '/motivation/save/$id/';
+    String _baseUrl = '$baseUrl/motivation/save/$id/';
     try {
-      Response response =
-          await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
+      await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;

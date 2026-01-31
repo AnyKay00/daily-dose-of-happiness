@@ -41,8 +41,7 @@ class ActionRepository {
   void saveActionToMemoryBook(String actionId) async {
     String _baseUrl = baseUrl + '/action/save/$actionId/';
     try {
-      Response response =
-          await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
+      await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;
@@ -50,10 +49,9 @@ class ActionRepository {
   }
 
   void likeActionToMemoryBook(String actionId) async {
-    String _baseUrl = baseUrl + '/action/like/$actionId/';
+    String _baseUrl = '$baseUrl/action/like/$actionId/';
     try {
-      Response response =
-          await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
+      await put(Uri.parse(_baseUrl), headers: buildHttpsHeader());
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;

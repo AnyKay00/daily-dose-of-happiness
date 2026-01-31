@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.invio.daily_dose_of_happiness"
+    namespace = "com.lioverse.daily_dose_of_happiness"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,7 +24,7 @@ android {
     }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.invio.daily_dose_of_happiness"
+        applicationId = "com.lioverse.daily_dose_of_happiness"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
