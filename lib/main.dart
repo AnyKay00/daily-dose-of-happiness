@@ -1,6 +1,5 @@
 import 'package:daily_dose_of_happiness/bloc/action_bloc/action_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_bloc/feeling_bloc.dart';
-
 import 'package:app_version_update/app_version_update.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_bloc.dart';
 import 'package:daily_dose_of_happiness/bloc/feeling_bloc/feeling_list_bloc/feeling_list_event.dart';
@@ -139,7 +138,7 @@ class _AppBootstrapScreenState extends State<AppBootstrapScreen> {
     if (isIOS) {
       await AppVersionUpdate.checkForUpdates(
         appleId: "6449080903",
-        playStoreId: "com.invio.dailydoseofhappiness",
+        playStoreId: "com.dailydoseofhappiness",
         country: 'de',
       ).then((data) async {
         if (data.canUpdate! && checkedVersion == false) {

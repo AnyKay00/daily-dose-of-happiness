@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.lioverse.dailydoseofhappiness</string>
+	<string>com.dailydoseofhappiness</string>
 	<key>PROJECT_ID</key>
 	<string>ddoh-d4ee3</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:8854480098:ios:8e3cdbdfa32b625da82abb</string>
+	<string>1:8854480098:ios:43550b4fbd3afbaba82abb</string>
 </dict>
 </plist>

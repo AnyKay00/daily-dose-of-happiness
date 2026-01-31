@@ -20,7 +20,7 @@ class MemoryBookRepository {
 
       // result ist dynamisch, meist List<dynamic>
       final rows = (result as List).cast<Map<String, dynamic>>();
-      print(result);
+
       return rows.map(DailyEntryMB.fromJson).toList();
     } on PostgrestException catch (e) {
       throw Exception('MemoryBook RPC failed: ${e.message}');
