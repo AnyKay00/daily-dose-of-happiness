@@ -22,6 +22,7 @@ class APICacheManager {
 
   void deleteHapinessPack() async {
     // motivation, joke, action
+    await storage.delete(key: happinessPackK);
     await storage.delete(key: motivationK);
     await storage.delete(key: jokeK);
     await storage.delete(key: actionK);

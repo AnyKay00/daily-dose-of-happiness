@@ -35,7 +35,7 @@ android {
         applicationId = "com.lioverse.daily_dose_of_happiness"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 1
+        versionCode = 2
         versionName = flutter.versionName
     }
 
